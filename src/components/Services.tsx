@@ -4,6 +4,7 @@ import { PenTool, Code, Lightbulb } from 'lucide-react';
 const services = [
   {
     title: 'UI/UX Design',
+    color: 'primary',
     icon: <PenTool size={32} className="text-primary" />,
     deliverables: [
       'Figma prototyping',
@@ -16,6 +17,7 @@ const services = [
   },
   {
     title: 'Full-Stack Web Development',
+    color: 'secondary',
     icon: <Code size={32} className="text-secondary" />,
     deliverables: [
       'MERN stack web applications',
@@ -27,6 +29,7 @@ const services = [
   },
   {
     title: 'Technical Consulting & Leadership',
+    color: 'primary',
     icon: <Lightbulb size={32} className="text-primary" />,
     deliverables: [
       'Tech architecture review',
@@ -40,7 +43,14 @@ const services = [
 
 export function Services() {
   return (
-    <section id="services" className="py-24 relative z-10">
+    <motion.section 
+      id="services" 
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className="py-24 relative z-10"
+    >
       <div className="container mx-auto px-6 max-w-7xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -62,29 +72,39 @@ export function Services() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="glass-card p-8 flex flex-col hover:-translate-y-2 transition-transform duration-300"
+              className={`group glass-card p-8 flex flex-col hover:-translate-y-2 transition-all duration-300 border border-white/5 hover:bg-white/10 ${service.color === 'primary' ? 'hover:border-primary/50 hover:shadow-[0_0_30px_rgba(123,92,240,0.15)]' : 'hover:border-secondary/50 hover:shadow-[0_0_30px_rgba(0,212,200,0.15)]'}`}
             >
-              <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-6">
+              <motion.div 
+                initial={{ scale: 0.5, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ type: "spring", stiffness: 200, delay: index * 0.1 + 0.3 }}
+                className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
+              >
                 {service.icon}
+              </motion.div>
+              
+              <div className="relative mb-6">
+                <h3 className="text-2xl font-heading font-bold text-white">{service.title}</h3>
+                <div className={`absolute -bottom-2 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500 bg-gradient-to-r ${service.color === 'primary' ? 'from-primary to-transparent' : 'from-secondary to-transparent'}`} />
               </div>
-              <h3 className="text-2xl font-heading font-bold text-white mb-6">{service.title}</h3>
               
               <ul className="space-y-3 mb-8 flex-grow">
                 {service.deliverables.map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-white/70 text-sm">
-                    <span className="text-primary mt-1">•</span>
+                  <li key={i} className="flex items-start gap-3 text-white/70 text-sm font-sans">
+                    <span className={`mt-1 ${service.color === 'primary' ? 'text-primary' : 'text-secondary'}`}>•</span>
                     {item}
                   </li>
                 ))}
               </ul>
 
-              <a href="#contact" className="mt-auto inline-flex items-center gap-2 text-sm font-medium text-white/50 hover:text-white transition-colors group">
-                Let's Talk <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+              <a href="#contact" className="mt-auto inline-flex items-center gap-2 text-sm font-medium text-white/50 hover:text-white transition-colors group/link">
+                Let's Talk <span className="group-hover/link:translate-x-1 transition-transform">&rarr;</span>
               </a>
             </motion.div>
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

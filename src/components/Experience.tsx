@@ -1,4 +1,5 @@
-import { motion } from 'motion/react';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'motion/react';
 
 const experiences = [
   {
@@ -35,8 +36,23 @@ const experiences = [
 ];
 
 export function Experience() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start center", "end center"]
+  });
+
+  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
   return (
-    <section id="experience" className="py-24 relative z-10">
+    <motion.section 
+      id="experience" 
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className="py-24 relative z-10"
+    >
       <div className="container mx-auto px-6 max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -50,34 +66,50 @@ export function Experience() {
           </h2>
         </motion.div>
 
-        <div className="relative border-l border-glass-border ml-4 md:ml-0">
+        <div ref={containerRef} className="relative ml-4 md:ml-0">
+          {/* Animated Timeline Line */}
+          <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-white/10" />
+          <motion.div 
+            className="absolute left-0 top-0 w-[2px] bg-gradient-to-b from-primary via-secondary to-transparent" 
+            style={{ height: lineHeight, transformOrigin: "top" }} 
+          />
+
           {experiences.map((exp, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: 0.1 }}
               className="mb-12 pl-8 relative"
             >
               {/* Timeline Dot */}
-              <div className="absolute -left-[5px] top-2 w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_10px_rgba(108,99,255,0.8)]" />
+              <motion.div 
+                initial={{ scale: 0 }}
+                whileInView={{ scale: [0, 1.5, 1] }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="absolute -left-[5px] top-8 w-3 h-3 rounded-full bg-primary shadow-[0_0_15px_rgba(123,92,240,0.8)] z-10" 
+              />
               
-              <div className="glass-card p-6 md:p-8">
-                <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
+              <div className="glass-card p-6 md:p-8 hover:bg-white/5 transition-colors duration-300">
+                <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
                   <div>
-                    <h3 className="text-xl font-heading font-bold text-white">{exp.title}</h3>
-                    <p className="text-secondary font-medium">{exp.company}</p>
+                    <h3 className="text-xl font-heading font-bold text-white mb-1">{exp.title}</h3>
+                    <div className="relative inline-block group cursor-default">
+                      <p className="text-secondary font-medium font-sans">{exp.company}</p>
+                      <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary group-hover:w-full transition-all duration-300" />
+                    </div>
                   </div>
-                  <span className="inline-block px-3 py-1 rounded-full bg-white/5 text-white/60 text-xs font-mono whitespace-nowrap">
+                  <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/40 border border-white/10 backdrop-blur-md text-white/80 text-xs font-mono whitespace-nowrap shadow-inner">
                     {exp.period}
                   </span>
                 </div>
                 
-                <ul className="space-y-2">
+                <ul className="space-y-3">
                   {exp.points.map((point, i) => (
-                    <li key={i} className="flex items-start gap-3 text-white/70 text-sm">
-                      <span className="text-primary/50 mt-1">-</span>
+                    <li key={i} className="flex items-start gap-3 text-white/70 text-sm font-sans">
+                      <span className="text-primary/50 mt-1.5 text-[10px]">■</span>
                       {point}
                     </li>
                   ))}
@@ -87,6 +119,6 @@ export function Experience() {
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

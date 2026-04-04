@@ -1,4 +1,6 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
+import { Github, Linkedin, Mail } from "lucide-react";
+import { motion } from "motion/react";
 
 const badges = [
   {
@@ -68,17 +70,17 @@ const badges = [
   },
 ];
 
-function OrbitBadge({ badge, index, total, mousePosRef }: { badge: any, index: number, total: number, mousePosRef: React.MutableRefObject<{x: number, y: number}> }) {
+function OrbitBadge({ badge, index, total, mousePosRef }: { key?: React.Key, badge: any, index: number, total: number, mousePosRef: React.MutableRefObject<{x: number, y: number}> }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const angleRef = useRef((index / total) * Math.PI * 2);
   const currentPos = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     let animationFrameId: number;
-    const radius = 200; // Orbit radius
+    const radius = 320; // Increased orbit radius for larger image
     const speed = 0.0025; // Orbit speed
-    const repelRadius = 150; // Distance to trigger repel
-    const maxRepel = 120; // Max outward push distance
+    const repelRadius = 220; // Distance to trigger repel
+    const maxRepel = 150; // Max outward push distance
 
     const animate = () => {
       // Increment angle for continuous orbit
@@ -184,30 +186,58 @@ export default function HeroFloatingBadges() {
   }, []);
 
   return (
-    <section id="home" style={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      minHeight: "100vh",
-      background: "radial-gradient(ellipse at 60% 40%, #0d1b2a 0%, #080c14 60%, #050810 100%)",
-      fontFamily: "'Syne', 'Inter', sans-serif",
-      paddingTop: "80px",
-      overflow: "hidden",
-    }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&display=swap');
+    <motion.section 
+      id="home" 
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100vh",
+        position: "relative",
+        paddingTop: "80px",
+        overflow: "hidden",
+      }}
+    >
+      {/* Faint radial spotlight effect centered on photo */}
+      <div style={{
+        position: 'absolute',
+        top: '50%',
+        right: '10%',
+        width: '800px',
+        height: '800px',
+        background: 'radial-gradient(circle, rgba(123, 92, 240, 0.15) 0%, rgba(5, 8, 16, 0) 70%)',
+        transform: 'translateY(-50%)',
+        zIndex: -1,
+        pointerEvents: 'none'
+      }} />
 
-        @keyframes orbitGlow {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(108,99,255,0); }
-          50% { box-shadow: 0 0 32px 4px rgba(108,99,255,0.18); }
+      <style>{`
+        @keyframes spin {
+          from { transform: translate(-50%, -50%) rotate(0deg); }
+          to { transform: translate(-50%, -50%) rotate(360deg); }
         }
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(24px); }
-          to { opacity: 1; transform: translateY(0); }
+        @keyframes shimmer {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
         }
-        @keyframes scaleIn {
-          from { opacity: 0; transform: scale(0.85); }
-          to { opacity: 1; transform: scale(1); }
+        
+        .shimmer-text {
+          background: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.8) 0%,
+            rgba(255, 255, 255, 1) 20%,
+            rgba(255, 255, 255, 0.8) 40%,
+            rgba(255, 255, 255, 0.8) 100%
+          );
+          background-size: 200% auto;
+          color: transparent;
+          -webkit-background-clip: text;
+          background-clip: text;
+          animation: shimmer 4s linear infinite;
         }
 
         .badge-pill {
@@ -219,9 +249,9 @@ export default function HeroFloatingBadges() {
           backdrop-filter: blur(12px);
           -webkit-backdrop-filter: blur(12px);
           border-radius: 100px;
-          font-family: 'Syne', 'Inter', sans-serif;
+          font-family: var(--font-mono);
           font-size: 13px;
-          font-weight: 600;
+          font-weight: 500;
           color: rgba(255,255,255,0.92);
           cursor: default;
           white-space: nowrap;
@@ -243,55 +273,60 @@ export default function HeroFloatingBadges() {
           pointer-events: none;
         }
 
-        .photo-frame {
-          animation: scaleIn 0.8s cubic-bezier(.34,1.2,.64,1) both;
-        }
-
-        .ring-glow {
-          animation: orbitGlow 4s ease-in-out infinite;
-        }
-
-        .text-block {
-          animation: fadeInUp 0.7s ease both;
-        }
-
-        .cta-btn {
-          background: rgba(108,99,255,0.15);
-          border: 1px solid rgba(108,99,255,0.4);
-          color: #a78bfa;
-          padding: 10px 24px;
+        .cta-btn-primary {
+          background: #7B5CF0;
+          color: #fff;
+          padding: 14px 32px;
           border-radius: 100px;
-          font-family: 'Syne', sans-serif;
-          font-size: 14px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: background 0.2s, border-color 0.2s, transform 0.15s;
-          letter-spacing: 0.02em;
+          font-family: var(--font-sans);
+          font-size: 16px;
+          font-weight: 500;
           text-decoration: none;
+          transition: all 0.3s ease;
+          display: inline-block;
+          position: relative;
+        }
+        .cta-btn-primary:hover {
+          background: #6a4ce0;
+          transform: translateY(-2px);
+          box-shadow: 0 0 24px 4px rgba(123, 92, 240, 0.4);
+        }
+        
+        .cta-btn-secondary {
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.1);
+          color: #fff;
+          padding: 14px 32px;
+          border-radius: 100px;
+          font-family: var(--font-sans);
+          font-size: 16px;
+          font-weight: 500;
+          text-decoration: none;
+          transition: all 0.3s ease;
           display: inline-block;
         }
-        .cta-btn:hover {
-          background: rgba(108,99,255,0.28);
-          border-color: rgba(108,99,255,0.7);
-          transform: translateY(-1px);
+        .cta-btn-secondary:hover {
+          background: rgba(255,255,255,0.08);
+          border-color: rgba(123, 92, 240, 0.5);
+          transform: translateY(-2px);
+          box-shadow: 0 0 24px 4px rgba(123, 92, 240, 0.2);
         }
-        .cta-btn.ghost {
-          background: transparent;
-          border: 1px solid rgba(255,255,255,0.12);
+
+        .social-icon {
           color: rgba(255,255,255,0.6);
+          transition: color 0.3s ease, transform 0.3s ease, filter 0.3s ease;
         }
-        .cta-btn.ghost:hover {
-          background: rgba(255,255,255,0.05);
-          border-color: rgba(255,255,255,0.25);
-          color: rgba(255,255,255,0.85);
-          transform: translateY(-1px);
+        .social-icon:hover {
+          color: #fff;
+          transform: translateY(-3px);
+          filter: drop-shadow(0 0 8px rgba(123, 92, 240, 0.6));
         }
         
         @media (max-width: 1024px) {
           .hero-container {
             flex-direction: column;
             text-align: center;
-            gap: 60px !important;
+            gap: 80px !important;
           }
           .text-block {
             align-items: center;
@@ -301,70 +336,126 @@ export default function HeroFloatingBadges() {
           .orbit-ring {
             display: none;
           }
+          .photo-frame {
+            transform: scale(0.7);
+          }
         }
       `}</style>
 
-      <div className="hero-container" style={{ display: "flex", alignItems: "center", gap: "80px", padding: "60px 20px", maxWidth: "1200px", width: "100%", margin: "0 auto" }}>
+      <div className="hero-container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "40px", padding: "60px 40px", maxWidth: "1300px", width: "100%", margin: "0 auto", zIndex: 1 }}>
 
         {/* Left — Text */}
-        <div style={{ maxWidth: 480 }} className="text-block">
-          <div style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            background: "rgba(108,99,255,0.1)", border: "0.5px solid rgba(108,99,255,0.3)",
-            borderRadius: 100, padding: "5px 14px", marginBottom: 20,
-          }}>
-            <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#7C3AED", display: "inline-block" }}/>
-            <span style={{ fontSize: 12, color: "#a78bfa", fontFamily: "'Syne', sans-serif", fontWeight: 600, letterSpacing: "0.06em" }}>
-              UI/UX · FULL-STACK · CTO @ IEDC
+        <div style={{ maxWidth: 600 }} className="text-block">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)",
+              borderRadius: 100, padding: "8px 20px", marginBottom: 32,
+            }}
+          >
+            <span style={{ fontSize: 14, color: "#00D4C8", fontFamily: "var(--font-sans)", fontWeight: 500 }}>
+              UI/UX Designer & Full-Stack Developer
             </span>
-          </div>
+          </motion.div>
 
-          <h1 style={{
-            fontSize: "clamp(40px, 5vw, 56px)", fontWeight: 700, lineHeight: 1.05,
-            color: "#fff", margin: "0 0 16px",
-            fontFamily: "'Syne', sans-serif",
-            letterSpacing: "-0.02em",
-          }}>
-            Muhammed<br/>
-            <span style={{ color: "#7B5CF0" }}>Hisham A</span>
-          </h1>
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            style={{
+              fontSize: "clamp(50px, 7vw, 84px)", fontWeight: 700, lineHeight: 1.1,
+              margin: "0 0 24px",
+              fontFamily: "var(--font-heading)",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            <span className="shimmer-text">Muhammed</span><br/>
+            <span style={{ 
+              background: "linear-gradient(to right, #7B5CF0, #00D4C8)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              display: "inline-block"
+            }}>Hisham A</span>
+          </motion.h1>
 
-          <p style={{
-            fontSize: 16, color: "rgba(255,255,255,0.6)",
-            lineHeight: 1.75, margin: "0 0 32px",
-            fontFamily: "'Syne', sans-serif", fontWeight: 400,
-          }}>
-            Building experiences that are both beautiful and engineered to scale. Design meets code, always.
-          </p>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+            style={{
+              fontSize: 20, color: "rgba(255,255,255,0.7)",
+              lineHeight: 1.6, margin: "0 0 48px", maxWidth: 480,
+              fontFamily: "var(--font-sans)", fontWeight: 400,
+            }}
+          >
+            Building experiences that are both beautiful and engineered to scale.
+          </motion.p>
 
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
-            <a href="#projects" className="cta-btn">View Projects →</a>
-            <a href="#contact" className="cta-btn ghost">Contact Me</a>
-          </div>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+            style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 48 }}
+          >
+            <a href="#projects" className="cta-btn-primary">View Projects &rarr;</a>
+            <a href="#contact" className="cta-btn-secondary">Contact Me</a>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            style={{ display: "flex", gap: 24, alignItems: "center" }}
+          >
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="social-icon"><Github size={24} /></a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-icon"><Linkedin size={24} /></a>
+            <a href="mailto:hishamaju189@gmail.com" className="social-icon"><Mail size={24} /></a>
+          </motion.div>
         </div>
 
         {/* Right — Photo + Badges */}
-        <div ref={frameRef} style={{ position: "relative", width: 320, height: 320, flexShrink: 0, margin: "0 auto" }} className="photo-frame">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.4, duration: 0.8, type: "spring", stiffness: 100 }}
+          ref={frameRef} 
+          style={{ position: "relative", width: 560, height: 560, flexShrink: 0 }} 
+          className="photo-frame"
+        >
 
           {/* Orbit rings */}
-          <div className="orbit-ring" style={{ width: 420, height: 420, top: -50, left: -50 }}/>
-          <div className="orbit-ring" style={{ width: 360, height: 360, top: -20, left: -20, borderStyle: "solid", borderColor: "rgba(108,99,255,0.08)" }}/>
+          <div className="orbit-ring" style={{ width: 740, height: 740, top: -90, left: -90 }}/>
+          <div className="orbit-ring" style={{ width: 600, height: 600, top: -20, left: -20, borderStyle: "solid", borderColor: "rgba(108,99,255,0.15)" }}/>
 
-          {/* Photo circle */}
-          <div className="ring-glow" style={{
-            width: 280, height: 280,
+          {/* Photo circle with rotating gradient border */}
+          <div style={{
+            position: 'absolute',
+            top: '50%', left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '508px', height: '508px',
+            borderRadius: '50%',
+            background: 'conic-gradient(from 0deg, #7B5CF0, #00D4C8, #7B5CF0)',
+            animation: 'spin 4s linear infinite',
+            zIndex: 0,
+          }} />
+          
+          <div style={{
+            width: 500, height: 500,
             borderRadius: "50%",
-            border: "2px solid rgba(108,99,255,0.45)",
             overflow: "hidden",
             position: "absolute",
             top: "50%", left: "50%",
             transform: "translate(-50%,-50%)",
-            background: "linear-gradient(135deg, #1a1040 0%, #0d1b2a 100%)",
+            background: "#050810",
+            zIndex: 1,
           }}>
             <img 
               src="https://picsum.photos/seed/hisham/800/800" 
               alt="Muhammed Hisham A" 
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.9 }}
               referrerPolicy="no-referrer"
             />
           </div>
@@ -378,8 +469,8 @@ export default function HeroFloatingBadges() {
               mousePosRef={mousePosRef} 
             />
           ))}
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }

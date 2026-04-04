@@ -14,10 +14,14 @@ import { Certifications } from './components/Certifications';
 import { Hobbies } from './components/Hobbies';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
+import CustomCursor from './components/CustomCursor';
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-background text-white selection:bg-primary/30 selection:text-white">
+    <div className="min-h-screen text-white selection:bg-primary/30 selection:text-white">
+      <div className="mesh-bg" />
+      <div className="noise-overlay" />
+      <CustomCursor />
       <Navbar />
       <main>
         <HeroFloatingBadges />
