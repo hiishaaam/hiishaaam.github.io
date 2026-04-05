@@ -75,7 +75,7 @@ export function About() {
               className="w-full h-full rounded-xl overflow-hidden bg-gradient-to-br from-primary/10 via-background to-secondary/10"
             >
               <img 
-                src="https://i.postimg.cc/pvSGPR0r/Gemini-Generated-Image-qgkohuqgkohuqgko.png" 
+                src="https://i.postimg.cc/RSSxxg8N/portfolio-aboutsection.jpg" 
                 alt="About Workspace" 
                 className="w-full h-full object-cover object-center"
               />
