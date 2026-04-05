@@ -346,39 +346,34 @@ export default function HeroFloatingBadges() {
 
         {/* Left — Text */}
         <div style={{ maxWidth: 600 }} className="text-block">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: 100, padding: "8px 20px", marginBottom: 32,
-            }}
-          >
-            <span style={{ fontSize: 14, color: "#00D4C8", fontFamily: "var(--font-sans)", fontWeight: 500 }}>
-              UI/UX Designer & Full-Stack Developer
-            </span>
-          </motion.div>
+          <div style={{ height: '30px', overflow: 'hidden', marginBottom: '24px', position: 'relative' }}>
+            <motion.div
+              animate={{ y: [0, -30, -60, -90, -120, -150] }}
+              transition={{ repeat: Infinity, duration: 10, ease: "easeInOut", times: [0, 0.15, 0.35, 0.55, 0.75, 0.95] }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
+            >
+              {['Full-Stack Developer', 'UI/UX Designer', 'CTO @ IEDC', 'MERN Engineer', 'Product Builder', 'Full-Stack Developer'].map((title, i) => (
+                <span key={i} style={{ fontSize: 14, color: "#7B5CF0", fontFamily: "var(--font-mono)", fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', height: '20px', display: 'flex', alignItems: 'center' }}>
+                  {title}
+                </span>
+              ))}
+            </motion.div>
+          </div>
 
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
             style={{
-              fontSize: "clamp(50px, 7vw, 84px)", fontWeight: 700, lineHeight: 1.1,
+              fontSize: "clamp(60px, 8vw, 80px)", fontWeight: 700, lineHeight: 1.05,
               margin: "0 0 24px",
               fontFamily: "var(--font-heading)",
-              letterSpacing: "-0.02em",
+              letterSpacing: "-0.03em",
+              color: "#ffffff"
             }}
           >
-            <span className="shimmer-text">Muhammed</span><br/>
-            <span style={{ 
-              background: "linear-gradient(to right, #7B5CF0, #00D4C8)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              display: "inline-block"
-            }}>Hisham A</span>
+            Muhammed<br/>
+            Hisham A
           </motion.h1>
 
           <motion.p 
@@ -386,12 +381,12 @@ export default function HeroFloatingBadges() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
             style={{
-              fontSize: 20, color: "rgba(255,255,255,0.7)",
+              fontSize: 20, color: "rgba(255,255,255,0.6)",
               lineHeight: 1.6, margin: "0 0 48px", maxWidth: 480,
               fontFamily: "var(--font-sans)", fontWeight: 400,
             }}
           >
-            Building experiences that are both beautiful and engineered to scale.
+            I design the experience. I build the product.
           </motion.p>
 
           <motion.div 
@@ -400,8 +395,8 @@ export default function HeroFloatingBadges() {
             transition={{ delay: 0.5, duration: 0.6 }}
             style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 48 }}
           >
-            <a href="#projects" className="cta-btn-primary">View Projects &rarr;</a>
-            <a href="#contact" className="cta-btn-secondary">Contact Me</a>
+            <a href="#projects" className="cta-btn-primary">VIEW WORK</a>
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="cta-btn-secondary">DOWNLOAD RESUME</a>
           </motion.div>
 
           <motion.div 

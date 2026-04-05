@@ -37,33 +37,33 @@ export default function CustomCursor() {
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 w-3 h-3 bg-primary rounded-full pointer-events-none z-[10000] mix-blend-screen"
+        className="fixed top-0 left-0 w-3 h-3 bg-primary rounded-full pointer-events-none z-[10000] mix-blend-screen shadow-[0_0_10px_rgba(123,92,240,0.8)]"
         animate={{
           x: mousePosition.x - 6,
           y: mousePosition.y - 6,
-          scale: isHovering ? 0 : 1,
+          scale: isHovering ? 2.5 : 1,
+          opacity: isHovering ? 0.5 : 1,
+        }}
+        transition={{
+          type: 'spring',
+          stiffness: 500,
+          damping: 28,
+          mass: 0.5,
+        }}
+      />
+      <motion.div
+        className="fixed top-0 left-0 w-8 h-8 border border-primary/30 rounded-full pointer-events-none z-[9999]"
+        animate={{
+          x: mousePosition.x - 16,
+          y: mousePosition.y - 16,
+          scale: isHovering ? 1.5 : 1,
           opacity: isHovering ? 0 : 1,
         }}
         transition={{
           type: 'spring',
-          stiffness: 1000,
-          damping: 40,
-          mass: 0.1,
-        }}
-      />
-      <motion.div
-        className="fixed top-0 left-0 w-10 h-10 border-2 border-primary rounded-full pointer-events-none z-[10000] mix-blend-screen"
-        animate={{
-          x: mousePosition.x - 20,
-          y: mousePosition.y - 20,
-          scale: isHovering ? 1.5 : 0,
-          opacity: isHovering ? 0.5 : 0,
-        }}
-        transition={{
-          type: 'spring',
-          stiffness: 400,
-          damping: 30,
-          mass: 0.5,
+          stiffness: 250,
+          damping: 20,
+          mass: 0.8,
         }}
       />
     </>

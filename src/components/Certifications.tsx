@@ -43,9 +43,7 @@ export function Certifications() {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
-            <span className="text-primary">/</span> certifications
-          </h2>
+          <span className="text-primary font-mono text-xs uppercase tracking-widest mb-4 block">/ certifications</span>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-6">

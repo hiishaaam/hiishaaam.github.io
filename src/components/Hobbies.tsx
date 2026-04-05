@@ -30,17 +30,35 @@ export function Hobbies() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-20 text-center"
+          className="mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-heading font-bold mb-6">
-            <span className="text-primary">/</span> beyond the code
-          </h2>
-          <p className="text-lg text-white/60 font-sans max-w-2xl mx-auto">
-            When I'm not pushing pixels or writing code, you can find me exploring the world through a lens, hitting the road, or enjoying a good game of football.
-          </p>
+          <span className="text-primary font-mono text-xs uppercase tracking-widest mb-4 block">/ beyond the code</span>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-16 items-center">
+        <div className="grid md:grid-cols-2 gap-16 items-center relative">
+          {/* Stickers */}
+          <motion.div 
+            initial={{ opacity: 0, rotate: -15, scale: 0.8 }}
+            whileInView={{ opacity: 0.2, rotate: -10, scale: 1 }}
+            className="absolute -top-10 -left-10 text-primary pointer-events-none z-0"
+          >
+            <Camera size={64} />
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0, rotate: 15, scale: 0.8 }}
+            whileInView={{ opacity: 0.2, rotate: 20, scale: 1 }}
+            className="absolute bottom-10 -right-10 text-secondary pointer-events-none z-0"
+          >
+            <Dribbble size={64} />
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0, rotate: 45, scale: 0.8 }}
+            whileInView={{ opacity: 0.1, rotate: 30, scale: 1 }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white pointer-events-none z-0"
+          >
+            <Code size={120} />
+          </motion.div>
+
           {/* Hobbies */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}

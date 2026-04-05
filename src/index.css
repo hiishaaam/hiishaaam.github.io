@@ -19,6 +19,11 @@ body {
   color: rgba(255, 255, 255, 0.85);
   font-family: var(--font-sans);
   overflow-x: hidden;
+  cursor: none;
+}
+
+a, button, input, textarea, select, .cursor-pointer {
+  cursor: none !important;
 }
 
 html {
