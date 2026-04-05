@@ -121,7 +121,7 @@ export function Contact() {
               <button 
                 type="submit" 
                 disabled={isSubmitting} 
-                className="w-full bg-primary hover:bg-primary/90 text-white font-bold tracking-widest text-sm py-4 px-8 transition-all duration-300 hover:shadow-[0_0_30px_rgba(123,92,240,0.5)] uppercase flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed rounded-lg"
+                className="w-full bg-primary hover:bg-primary/90 text-white font-bold tracking-widest text-sm py-4 px-8 transition-all duration-300 hover:shadow-[0_0_30px_rgba(224,122,95,0.5)] uppercase flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed rounded-lg"
               >
                 {isSubmitting ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

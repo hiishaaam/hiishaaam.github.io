@@ -1,22 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-heading: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  --color-background: #050810;
-  --color-primary: #7B5CF0;
-  --color-secondary: #00D4C8;
+  --color-background: #08090D;
+  --color-primary: #E07A5F;
+  --color-secondary: #81B29A;
   --color-glass: rgba(255, 255, 255, 0.02);
-  --color-glass-hover: rgba(255, 255, 255, 0.04);
-  --color-glass-border: rgba(255, 255, 255, 0.05);
+  --color-glass-hover: rgba(255, 255, 255, 0.05);
+  --color-glass-border: rgba(255, 255, 255, 0.06);
 }
 
 body {
   background-color: var(--color-background);
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.87);
   font-family: var(--font-sans);
   overflow-x: hidden;
   cursor: none;
@@ -32,35 +32,35 @@ html {
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #050810;
+  background: #08090D;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(123, 92, 240, 0.5);
+  background: rgba(224, 122, 95, 0.4);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(123, 92, 240, 0.8);
+  background: rgba(224, 122, 95, 0.7);
 }
 
 .glass-card {
   background: var(--color-glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--color-glass-border);
   border-radius: 1rem;
-  transition: all 0.3s ease;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-card:hover {
   background: var(--color-glass-hover);
-  border-color: rgba(123, 92, 240, 0.3);
+  border-color: rgba(224, 122, 95, 0.2);
 }
 
 .text-gradient {
-  background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -85,7 +85,7 @@ html {
   height: 100vh;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.04;
+  opacity: 0.03;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
@@ -97,13 +97,13 @@ html {
   width: 100vw;
   height: 100vh;
   z-index: -1;
-  background-color: #050810;
+  background-color: #08090D;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(15, 20, 40, 0.8) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(20, 10, 40, 0.6) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(10, 20, 40, 0.8) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(30, 10, 40, 0.6) 0px, transparent 50%);
-  animation: meshShift 20s ease-in-out infinite alternate;
+    radial-gradient(at 0% 0%, rgba(45, 25, 15, 0.6) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(20, 35, 28, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(40, 20, 12, 0.6) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(18, 35, 28, 0.5) 0px, transparent 50%);
+  animation: meshShift 25s ease-in-out infinite alternate;
 }
 
 @keyframes meshShift {

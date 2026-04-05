@@ -69,13 +69,13 @@ export function About() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-5 relative overflow-hidden rounded-2xl bg-[#0a0f1a] border border-white/5 p-2 aspect-[4/5] max-w-md mx-auto lg:mx-0"
           >
-            <motion.img
+            {/* TODO: Replace with your actual workspace/portrait photo */}
+            <motion.div
               style={{ y, scale: 1.15 }}
-              src="https://picsum.photos/seed/workspace/800/1000"
-              alt="Workspace"
-              className="w-full h-full object-cover rounded-xl opacity-80 grayscale hover:grayscale-0 transition-all duration-700"
-              referrerPolicy="no-referrer"
-            />
+              className="w-full h-full rounded-xl bg-gradient-to-br from-primary/10 via-background to-secondary/10 flex items-center justify-center"
+            >
+              <span className="text-7xl font-mono text-white/5 select-none">{'{ }'}</span>
+            </motion.div>
           </motion.div>
 
           {/* Right: Bio & Stats */}
@@ -87,9 +87,15 @@ export function About() {
               transition={{ duration: 0.8 }}
               className="pl-6 border-l border-primary mb-12"
             >
-              <p className="text-xl md:text-2xl text-white/80 leading-relaxed font-sans">
+              <motion.p 
+                className="text-lg md:text-xl text-white/80 leading-relaxed font-sans"
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.8 }}
+              >
                 I'm a Computer Engineering student at Seethi Sahib Memorial Polytechnic College, Tirur — and the CTO of its IEDC. I design interfaces in Figma and ship them in React. I've built production systems used by 1,000+ students, led development teams, and worked professionally as a Junior Developer at Infinio Technology Solutions. I don't just design how it looks — I build how it works.
-              </p>
+              </motion.p>
             </motion.div>
 
             <div className="grid grid-cols-2 gap-4">

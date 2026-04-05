@@ -209,7 +209,7 @@ export default function HeroFloatingBadges() {
         right: '10%',
         width: '800px',
         height: '800px',
-        background: 'radial-gradient(circle, rgba(123, 92, 240, 0.15) 0%, rgba(5, 8, 16, 0) 70%)',
+        background: 'radial-gradient(circle, rgba(224, 122, 95, 0.10) 0%, rgba(8, 9, 13, 0) 70%)',
         transform: 'translateY(-50%)',
         zIndex: -1,
         pointerEvents: 'none'
@@ -269,12 +269,12 @@ export default function HeroFloatingBadges() {
         .orbit-ring {
           position: absolute;
           border-radius: 50%;
-          border: 1px dashed rgba(108,99,255,0.12);
+          border: 1px dashed rgba(224, 122, 95, 0.08);
           pointer-events: none;
         }
 
         .cta-btn-primary {
-          background: #7B5CF0;
+          background: #E07A5F;
           color: #fff;
           padding: 14px 32px;
           border-radius: 100px;
@@ -287,9 +287,9 @@ export default function HeroFloatingBadges() {
           position: relative;
         }
         .cta-btn-primary:hover {
-          background: #6a4ce0;
+          background: #C96B50;
           transform: translateY(-2px);
-          box-shadow: 0 0 24px 4px rgba(123, 92, 240, 0.4);
+          box-shadow: 0 0 24px 4px rgba(224, 122, 95, 0.4);
         }
         
         .cta-btn-secondary {
@@ -307,9 +307,9 @@ export default function HeroFloatingBadges() {
         }
         .cta-btn-secondary:hover {
           background: rgba(255,255,255,0.08);
-          border-color: rgba(123, 92, 240, 0.5);
+          border-color: rgba(224, 122, 95, 0.4);
           transform: translateY(-2px);
-          box-shadow: 0 0 24px 4px rgba(123, 92, 240, 0.2);
+          box-shadow: 0 0 24px 4px rgba(224, 122, 95, 0.2);
         }
 
         .social-icon {
@@ -319,7 +319,7 @@ export default function HeroFloatingBadges() {
         .social-icon:hover {
           color: #fff;
           transform: translateY(-3px);
-          filter: drop-shadow(0 0 8px rgba(123, 92, 240, 0.6));
+          filter: drop-shadow(0 0 8px rgba(224, 122, 95, 0.5));
         }
         
         @media (max-width: 1024px) {
@@ -353,7 +353,7 @@ export default function HeroFloatingBadges() {
               style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
             >
               {['Full-Stack Developer', 'UI/UX Designer', 'CTO @ IEDC', 'MERN Engineer', 'Product Builder', 'Full-Stack Developer'].map((title, i) => (
-                <span key={i} style={{ fontSize: 14, color: "#7B5CF0", fontFamily: "var(--font-mono)", fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', height: '20px', display: 'flex', alignItems: 'center' }}>
+                <span key={i} style={{ fontSize: 14, color: "#81B29A", fontFamily: "var(--font-mono)", fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', height: '20px', display: 'flex', alignItems: 'center' }}>
                   {title}
                 </span>
               ))}
@@ -372,8 +372,13 @@ export default function HeroFloatingBadges() {
               color: "#ffffff"
             }}
           >
-            Muhammed<br/>
-            Hisham A
+            <span className="shimmer-text">Muhammed</span><br/>
+            <span style={{ 
+              background: "linear-gradient(135deg, #E07A5F, #81B29A)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              display: "inline-block"
+            }}>Hisham A</span>
           </motion.h1>
 
           <motion.p 
@@ -423,7 +428,7 @@ export default function HeroFloatingBadges() {
 
           {/* Orbit rings */}
           <div className="orbit-ring" style={{ width: 740, height: 740, top: -90, left: -90 }}/>
-          <div className="orbit-ring" style={{ width: 600, height: 600, top: -20, left: -20, borderStyle: "solid", borderColor: "rgba(108,99,255,0.15)" }}/>
+          <div className="orbit-ring" style={{ width: 600, height: 600, top: -20, left: -20, borderStyle: "solid", borderColor: "rgba(224, 122, 95, 0.12)" }}/>
 
           {/* Photo circle with rotating gradient border */}
           <div style={{
@@ -432,7 +437,7 @@ export default function HeroFloatingBadges() {
             transform: 'translate(-50%, -50%)',
             width: '508px', height: '508px',
             borderRadius: '50%',
-            background: 'conic-gradient(from 0deg, #7B5CF0, #00D4C8, #7B5CF0)',
+            background: 'conic-gradient(from 0deg, #E07A5F, #81B29A, #E07A5F)',
             animation: 'spin 4s linear infinite',
             zIndex: 0,
           }} />
@@ -444,15 +449,20 @@ export default function HeroFloatingBadges() {
             position: "absolute",
             top: "50%", left: "50%",
             transform: "translate(-50%,-50%)",
-            background: "#050810",
+            background: "#08090D",
             zIndex: 1,
           }}>
-            <img 
-              src="https://picsum.photos/seed/hisham/800/800" 
-              alt="Muhammed Hisham A" 
-              style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.9 }}
-              referrerPolicy="no-referrer"
-            />
+            {/* TODO: Replace with your actual professional headshot */}
+            <div style={{ 
+              width: "100%", height: "100%", 
+              display: "flex", alignItems: "center", justifyContent: "center",
+              background: "linear-gradient(135deg, #1a1a2e, #16213e)",
+              fontSize: "140px", fontFamily: "var(--font-heading)",
+              fontWeight: 700, color: "rgba(224, 122, 95, 0.2)",
+              letterSpacing: "-0.05em", userSelect: "none"
+            }}>
+              MH
+            </div>
           </div>
 
           {badges.map((badge, index) => (

@@ -49,13 +49,18 @@ export function Footer() {
             transition={{ duration: 1, delay: 0.4 }}
             className="text-xs text-white/40 font-sans italic"
           >
+<<<<<<< HEAD
             Designed & Built by Hisham
           </motion.div>
+=======
+            © {new Date().getFullYear()} Muhammed Hisham A · Designed & Built by Hisham
+          </motion.p>
+>>>>>>> a310aca (Refactor: design overhaul and AI Studio cleanup)
           
           <style>{`
             @keyframes pulse-reminder {
-              0%, 90%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(123, 92, 240, 0); }
-              95% { transform: scale(1.1); box-shadow: 0 0 15px 2px rgba(123, 92, 240, 0.4); }
+              0%, 90%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(224, 122, 95, 0); }
+              95% { transform: scale(1.1); box-shadow: 0 0 15px 2px rgba(224, 122, 95, 0.4); }
             }
             .animate-pulse-reminder {
               animation: pulse-reminder 4s infinite;

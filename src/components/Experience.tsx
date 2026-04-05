@@ -102,6 +102,7 @@ export function Experience() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className={`mb-12 pl-8 relative ${exp.type === 'cert' ? 'md:w-1/2' : ''}`}
             >
+<<<<<<< HEAD
               {/* Timeline Dot/Diamond */}
               {exp.type === 'work' ? (
                 <motion.div 
@@ -120,6 +121,16 @@ export function Experience() {
                   className="absolute -left-[4px] top-6 w-2 h-2 bg-secondary z-10" 
                 />
               )}
+=======
+              {/* Timeline Dot */}
+              <motion.div 
+                initial={{ scale: 0 }}
+                whileInView={{ scale: [0, 1.5, 1] }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="absolute -left-[5px] top-8 w-3 h-3 rounded-full bg-primary shadow-[0_0_15px_rgba(224,122,95,0.8)] z-10" 
+              />
+>>>>>>> a310aca (Refactor: design overhaul and AI Studio cleanup)
               
               {exp.type === 'work' ? (
                 <div className="glass-card p-6 md:p-8 hover:bg-white/5 transition-colors duration-300">

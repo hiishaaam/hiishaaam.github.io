@@ -193,8 +193,8 @@ export function Projects() {
     >
       <style>{`
         @keyframes pulse-slow {
-          0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(123, 92, 240, 0.4); }
-          50% { opacity: 0.8; box-shadow: 0 0 10px 2px rgba(123, 92, 240, 0.2); }
+          0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(224, 122, 95, 0.4); }
+          50% { opacity: 0.8; box-shadow: 0 0 10px 2px rgba(224, 122, 95, 0.2); }
         }
         .animate-pulse-slow {
           animation: pulse-slow 3s ease-in-out infinite;
