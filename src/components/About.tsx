@@ -69,12 +69,16 @@ export function About() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-5 relative overflow-hidden rounded-2xl bg-[#0a0f1a] border border-white/5 p-2 aspect-[4/5] max-w-md mx-auto lg:mx-0"
           >
-            {/* TODO: Replace with your actual workspace/portrait photo */}
+            {/* Workspace/portrait photo supplied by user */}
             <motion.div
               style={{ y, scale: 1.15 }}
-              className="w-full h-full rounded-xl bg-gradient-to-br from-primary/10 via-background to-secondary/10 flex items-center justify-center"
+              className="w-full h-full rounded-xl overflow-hidden bg-gradient-to-br from-primary/10 via-background to-secondary/10"
             >
-              <span className="text-7xl font-mono text-white/5 select-none">{'{ }'}</span>
+              <img 
+                src="https://i.postimg.cc/pvSGPR0r/Gemini-Generated-Image-qgkohuqgkohuqgko.png" 
+                alt="About Workspace" 
+                className="w-full h-full object-cover object-center"
+              />
             </motion.div>
           </motion.div>
 
