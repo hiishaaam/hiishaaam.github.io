@@ -49,13 +49,8 @@ export function Footer() {
             transition={{ duration: 1, delay: 0.4 }}
             className="text-xs text-white/40 font-sans italic"
           >
-<<<<<<< HEAD
             Designed & Built by Hisham
           </motion.div>
-=======
-            © {new Date().getFullYear()} Muhammed Hisham A · Designed & Built by Hisham
-          </motion.p>
->>>>>>> a310aca (Refactor: design overhaul and AI Studio cleanup)
           
           <style>{`
             @keyframes pulse-reminder {

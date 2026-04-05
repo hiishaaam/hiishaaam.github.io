@@ -29,8 +29,15 @@ export function Navbar() {
       }`}
     >
       <div className="container mx-auto px-6 max-w-7xl flex items-center justify-between">
-        <a href="#home" className="text-2xl font-heading font-bold text-primary tracking-tighter">
-          MH
+        <a href="#home" className="flex items-baseline gap-1" aria-label="Home">
+          <svg viewBox="0 0 120 40" className="h-7 w-auto text-white hover:text-white/80 transition-colors" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* M */}
+            <path d="M4 36V4H16L26 22L36 4H48V36H36V18L26 34L16 18V36H4Z" fill="currentColor" />
+            {/* H */}
+            <path d="M56 36V4H68V14H82V4H94V36H82V24H68V36H56Z" fill="currentColor" />
+            {/* Dot (using terracotta primary color) */}
+            <circle cx="108" cy="30" r="6" fill="#E07A5F" />
+          </svg>
         </a>
 
         {/* Desktop Nav */}

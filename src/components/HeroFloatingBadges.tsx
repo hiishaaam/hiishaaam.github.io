@@ -10,11 +10,11 @@ const badges = [
     border: "rgba(97,218,251,0.35)",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="#61DAFB"/>
-        <circle cx="12" cy="12" r="3" fill="none" stroke="#61DAFB" strokeWidth="1.5"/>
-        <ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="#61DAFB" strokeWidth="1.2" transform="rotate(0 12 12)"/>
-        <ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="#61DAFB" strokeWidth="1.2" transform="rotate(60 12 12)"/>
-        <ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="#61DAFB" strokeWidth="1.2" transform="rotate(120 12 12)"/>
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="#61DAFB" />
+        <circle cx="12" cy="12" r="3" fill="none" stroke="#61DAFB" strokeWidth="1.5" />
+        <ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="#61DAFB" strokeWidth="1.2" transform="rotate(0 12 12)" />
+        <ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="#61DAFB" strokeWidth="1.2" transform="rotate(60 12 12)" />
+        <ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="#61DAFB" strokeWidth="1.2" transform="rotate(120 12 12)" />
       </svg>
     ),
   },
@@ -25,11 +25,11 @@ const badges = [
     border: "rgba(162,89,255,0.35)",
     icon: (
       <svg width="16" height="16" viewBox="0 0 38 57" fill="none">
-        <path d="M19 28.5A9.5 9.5 0 0 1 28.5 19H19V9.5A9.5 9.5 0 0 0 9.5 19v.5a9 9 0 0 0 9.5 9z" fill="#0ACF83"/>
-        <path d="M19 9.5h9.5a9.5 9.5 0 1 1-9.5 9.5V9.5z" fill="#A259FF"/>
-        <path d="M9.5 19H19v9.5a9.5 9.5 0 0 1-9.5-9.5z" fill="#F24E1E"/>
-        <path d="M19 28.5v9.5a9.5 9.5 0 0 1 0-19v9.5z" fill="#FF7262"/>
-        <circle cx="28.5" cy="28.5" r="9.5" fill="#1ABCFE"/>
+        <path d="M19 28.5A9.5 9.5 0 0 1 28.5 19H19V9.5A9.5 9.5 0 0 0 9.5 19v.5a9 9 0 0 0 9.5 9z" fill="#0ACF83" />
+        <path d="M19 9.5h9.5a9.5 9.5 0 1 1-9.5 9.5V9.5z" fill="#A259FF" />
+        <path d="M9.5 19H19v9.5a9.5 9.5 0 0 1-9.5-9.5z" fill="#F24E1E" />
+        <path d="M19 28.5v9.5a9.5 9.5 0 0 1 0-19v9.5z" fill="#FF7262" />
+        <circle cx="28.5" cy="28.5" r="9.5" fill="#1ABCFE" />
       </svg>
     ),
   },
@@ -40,8 +40,8 @@ const badges = [
     border: "rgba(61,220,132,0.35)",
     icon: (
       <svg width="16" height="16" viewBox="0 0 256 255" fill="none">
-        <path d="M126.9 0C105 0 90.2 9.8 90.2 9.8L90 56.6h37.6V64H56.4C38.6 64 18 73.3 18 108.8c0 35.5 19.7 34.3 19.7 34.3H49v-21.5s-1.3-19.7 19.3-19.7h67.5s18.7.3 18.7-18.1V38.6s3.2-38.6-27.6-38.6zm-15.4 12c5.2 0 9.4 4.2 9.4 9.4s-4.2 9.4-9.4 9.4-9.4-4.2-9.4-9.4 4.2-9.4 9.4-9.4z" fill="#366A96"/>
-        <path d="M129.1 255c21.9 0 36.7-9.8 36.7-9.8l.2-46.8h-37.6v-7.4h71.2c17.8 0 38.4-9.3 38.4-44.8 0-35.5-19.7-34.3-19.7-34.3H207v21.5s1.3 19.7-19.3 19.7h-67.5s-18.7-.3-18.7 18.1v45s-3.2 38.8 27.6 38.8zm15.4-12c-5.2 0-9.4-4.2-9.4-9.4s4.2-9.4 9.4-9.4 9.4 4.2 9.4 9.4-4.2 9.4-9.4 9.4z" fill="#FFC331"/>
+        <path d="M126.9 0C105 0 90.2 9.8 90.2 9.8L90 56.6h37.6V64H56.4C38.6 64 18 73.3 18 108.8c0 35.5 19.7 34.3 19.7 34.3H49v-21.5s-1.3-19.7 19.3-19.7h67.5s18.7.3 18.7-18.1V38.6s3.2-38.6-27.6-38.6zm-15.4 12c5.2 0 9.4 4.2 9.4 9.4s-4.2 9.4-9.4 9.4-9.4-4.2-9.4-9.4 4.2-9.4 9.4-9.4z" fill="#366A96" />
+        <path d="M129.1 255c21.9 0 36.7-9.8 36.7-9.8l.2-46.8h-37.6v-7.4h71.2c17.8 0 38.4-9.3 38.4-44.8 0-35.5-19.7-34.3-19.7-34.3H207v21.5s1.3 19.7-19.3 19.7h-67.5s-18.7-.3-18.7 18.1v45s-3.2 38.8 27.6 38.8zm15.4-12c-5.2 0-9.4-4.2-9.4-9.4s4.2-9.4 9.4-9.4 9.4 4.2 9.4 9.4-4.2 9.4-9.4 9.4z" fill="#FFC331" />
       </svg>
     ),
   },
@@ -52,7 +52,7 @@ const badges = [
     border: "rgba(56,189,248,0.35)",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24">
-        <path fill="#e6edf3" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+        <path fill="#e6edf3" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
       </svg>
     ),
   },
@@ -63,14 +63,14 @@ const badges = [
     border: "rgba(62,207,142,0.35)",
     icon: (
       <svg width="16" height="16" viewBox="0 0 109 113" fill="none">
-        <path d="M63.7 0.3c-2.5-3-7.2-1.3-7.2 2.6v44.5h40c2.9 0 4.5-3.3 2.7-5.6L63.7.3z" fill="#3ECF8E"/>
-        <path d="M45.3 112.7c2.5 3 7.2 1.3 7.2-2.6V65.6H12.5c-2.9 0-4.5 3.3-2.7 5.6l35.5 41.5z" fill="#3ECF8E" opacity="0.6"/>
+        <path d="M63.7 0.3c-2.5-3-7.2-1.3-7.2 2.6v44.5h40c2.9 0 4.5-3.3 2.7-5.6L63.7.3z" fill="#3ECF8E" />
+        <path d="M45.3 112.7c2.5 3 7.2 1.3 7.2-2.6V65.6H12.5c-2.9 0-4.5 3.3-2.7 5.6l35.5 41.5z" fill="#3ECF8E" opacity="0.6" />
       </svg>
     ),
   },
 ];
 
-function OrbitBadge({ badge, index, total, mousePosRef }: { key?: React.Key, badge: any, index: number, total: number, mousePosRef: React.MutableRefObject<{x: number, y: number}> }) {
+function OrbitBadge({ badge, index, total, mousePosRef }: { key?: React.Key, badge: any, index: number, total: number, mousePosRef: React.MutableRefObject<{ x: number, y: number }> }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const angleRef = useRef((index / total) * Math.PI * 2);
   const currentPos = useRef({ x: 0, y: 0 });
@@ -106,11 +106,11 @@ function OrbitBadge({ badge, index, total, mousePosRef }: { key?: React.Key, bad
       // Apply repel force if mouse is near
       if (dist < repelRadius) {
         const force = Math.pow((repelRadius - dist) / repelRadius, 1.2);
-        
+
         // Push outward from the center of the image
         const dirX = baseX / radius;
         const dirY = baseY / radius;
-        
+
         targetX = baseX + dirX * force * maxRepel;
         targetY = baseY + dirY * force * maxRepel;
       }
@@ -126,26 +126,26 @@ function OrbitBadge({ badge, index, total, mousePosRef }: { key?: React.Key, bad
 
       animationFrameId = requestAnimationFrame(animate);
     };
-    
+
     animate();
     return () => cancelAnimationFrame(animationFrameId);
   }, [index, total, mousePosRef]);
 
   return (
-    <div 
+    <div
       ref={wrapperRef}
-      style={{ 
-        position: 'absolute', 
-        top: '50%', 
-        left: '50%', 
+      style={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
         zIndex: 10,
         willChange: 'transform'
       }}
       onMouseEnter={(e) => { e.currentTarget.style.zIndex = '20'; }}
       onMouseLeave={(e) => { e.currentTarget.style.zIndex = '10'; }}
     >
-      <div 
-        className="badge-pill" 
+      <div
+        className="badge-pill"
         style={{ border: `0.5px solid ${badge.border}` }}
       >
         <span className="badge-icon">{badge.icon}</span>
@@ -165,7 +165,7 @@ export default function HeroFloatingBadges() {
       const rect = frameRef.current.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      
+
       mousePosRef.current = {
         x: e.clientX - centerX,
         y: e.clientY - centerY
@@ -186,8 +186,8 @@ export default function HeroFloatingBadges() {
   }, []);
 
   return (
-    <motion.section 
-      id="home" 
+    <motion.section
+      id="home"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
@@ -360,7 +360,7 @@ export default function HeroFloatingBadges() {
             </motion.div>
           </div>
 
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
@@ -372,8 +372,8 @@ export default function HeroFloatingBadges() {
               color: "#ffffff"
             }}
           >
-            <span className="shimmer-text">Muhammed</span><br/>
-            <span style={{ 
+            <span className="shimmer-text">Muhammed</span><br />
+            <span style={{
               background: "linear-gradient(135deg, #E07A5F, #81B29A)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -381,7 +381,7 @@ export default function HeroFloatingBadges() {
             }}>Hisham A</span>
           </motion.h1>
 
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
@@ -394,7 +394,7 @@ export default function HeroFloatingBadges() {
             I design the experience. I build the product.
           </motion.p>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.6 }}
@@ -404,7 +404,7 @@ export default function HeroFloatingBadges() {
             <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="cta-btn-secondary">DOWNLOAD RESUME</a>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.6 }}
@@ -417,18 +417,18 @@ export default function HeroFloatingBadges() {
         </div>
 
         {/* Right — Photo + Badges */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4, duration: 0.8, type: "spring", stiffness: 100 }}
-          ref={frameRef} 
-          style={{ position: "relative", width: 560, height: 560, flexShrink: 0 }} 
+          ref={frameRef}
+          style={{ position: "relative", width: 560, height: 560, flexShrink: 0 }}
           className="photo-frame"
         >
 
           {/* Orbit rings */}
-          <div className="orbit-ring" style={{ width: 740, height: 740, top: -90, left: -90 }}/>
-          <div className="orbit-ring" style={{ width: 600, height: 600, top: -20, left: -20, borderStyle: "solid", borderColor: "rgba(224, 122, 95, 0.12)" }}/>
+          <div className="orbit-ring" style={{ width: 740, height: 740, top: -90, left: -90 }} />
+          <div className="orbit-ring" style={{ width: 600, height: 600, top: -20, left: -20, borderStyle: "solid", borderColor: "rgba(224, 122, 95, 0.12)" }} />
 
           {/* Photo circle with rotating gradient border */}
           <div style={{
@@ -441,7 +441,7 @@ export default function HeroFloatingBadges() {
             animation: 'spin 4s linear infinite',
             zIndex: 0,
           }} />
-          
+
           <div style={{
             width: 500, height: 500,
             borderRadius: "50%",
@@ -452,26 +452,38 @@ export default function HeroFloatingBadges() {
             background: "#08090D",
             zIndex: 1,
           }}>
-            {/* TODO: Replace with your actual professional headshot */}
-            <div style={{ 
-              width: "100%", height: "100%", 
+            {/* Fallback skeleton/initials under the image */}
+            <div style={{
+              position: "absolute", inset: 0,
               display: "flex", alignItems: "center", justifyContent: "center",
               background: "linear-gradient(135deg, #1a1a2e, #16213e)",
               fontSize: "140px", fontFamily: "var(--font-heading)",
               fontWeight: 700, color: "rgba(224, 122, 95, 0.2)",
-              letterSpacing: "-0.05em", userSelect: "none"
+              letterSpacing: "-0.05em", userSelect: "none", zIndex: 0
             }}>
               MH
             </div>
+            
+            <img 
+              src="https://i.postimg.cc/cdtNhX5C/portfolio-main-image.jpg" 
+              alt="Muhammed Hisham A" 
+              style={{ 
+                position: "relative", zIndex: 1, 
+                width: "100%", height: "100%", 
+                objectFit: "cover", 
+                /* Image blending edge-fade if needed, but border radius masks it */
+              }}
+              onError={(e) => { e.currentTarget.style.opacity = '0'; }}
+            />
           </div>
 
           {badges.map((badge, index) => (
-            <OrbitBadge 
-              key={badge.id} 
-              badge={badge} 
-              index={index} 
-              total={badges.length} 
-              mousePosRef={mousePosRef} 
+            <OrbitBadge
+              key={badge.id}
+              badge={badge}
+              index={index}
+              total={badges.length}
+              mousePosRef={mousePosRef}
             />
           ))}
         </motion.div>
