@@ -400,7 +400,7 @@ export default function HeroFloatingBadges() {
             style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 48 }}
           >
             <a href="#projects" className="cta-btn-primary">VIEW WORK</a>
-            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="cta-btn-secondary">DOWNLOAD RESUME</a>
+            <a href="/Muhammed Hisham A.pdf" download target="_blank" rel="noopener noreferrer" className="cta-btn-secondary">DOWNLOAD RESUME</a>
           </motion.div>
 
           <motion.div
