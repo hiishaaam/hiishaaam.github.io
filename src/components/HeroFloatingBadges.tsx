@@ -409,8 +409,8 @@ export default function HeroFloatingBadges() {
             transition={{ delay: 0.6, duration: 0.6 }}
             style={{ display: "flex", gap: 24, alignItems: "center" }}
           >
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="social-icon"><Github size={24} /></a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-icon"><Linkedin size={24} /></a>
+            <a href="https://github.com/hiishaaam" target="_blank" rel="noopener noreferrer" className="social-icon"><Github size={24} /></a>
+            <a href="https://www.linkedin.com/in/hiishaaam/" target="_blank" rel="noopener noreferrer" className="social-icon"><Linkedin size={24} /></a>
             <a href="mailto:hishamaju189@gmail.com" className="social-icon"><Mail size={24} /></a>
           </motion.div>
         </div>

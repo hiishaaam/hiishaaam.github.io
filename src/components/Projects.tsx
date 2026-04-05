@@ -229,7 +229,7 @@ export function Projects() {
             Want to see it live?
           </h3>
           <a 
-            href="https://github.com" 
+            href="https://github.com/hiishaaam" 
             target="_blank" 
             rel="noopener noreferrer"
             className="flex items-center gap-3 px-6 py-3 bg-white text-black rounded-full font-bold text-sm tracking-wider uppercase hover:bg-gray-200 transition-colors"

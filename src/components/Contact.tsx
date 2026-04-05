@@ -161,7 +161,7 @@ export function Contact() {
             </button>
 
             <a 
-              href="https://linkedin.com" 
+              href="https://www.linkedin.com/in/hiishaaam/" 
               target="_blank" 
               rel="noopener noreferrer"
               className="glass-card p-6 flex items-center justify-between gap-4 hover:bg-white/10 transition-all duration-300 hover:-translate-y-1 group w-full"
@@ -179,7 +179,7 @@ export function Contact() {
             </a>
 
             <a 
-              href="https://github.com" 
+              href="https://github.com/hiishaaam" 
               target="_blank" 
               rel="noopener noreferrer"
               className="glass-card p-6 flex items-center justify-between gap-4 hover:bg-white/10 transition-all duration-300 hover:-translate-y-1 group w-full"
