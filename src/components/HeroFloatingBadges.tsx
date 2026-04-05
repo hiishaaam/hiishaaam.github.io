@@ -10,11 +10,10 @@ const badges = [
     border: "rgba(97,218,251,0.35)",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="#61DAFB" />
-        <circle cx="12" cy="12" r="3" fill="none" stroke="#61DAFB" strokeWidth="1.5" />
-        <ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="#61DAFB" strokeWidth="1.2" transform="rotate(0 12 12)" />
-        <ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="#61DAFB" strokeWidth="1.2" transform="rotate(60 12 12)" />
-        <ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="#61DAFB" strokeWidth="1.2" transform="rotate(120 12 12)" />
+        <circle cx="12" cy="12" r="2.5" fill="#61DAFB" />
+        <ellipse cx="12" cy="12" rx="10" ry="4" stroke="#61DAFB" strokeWidth="1.2" />
+        <ellipse cx="12" cy="12" rx="10" ry="4" stroke="#61DAFB" strokeWidth="1.2" transform="rotate(60 12 12)" />
+        <ellipse cx="12" cy="12" rx="10" ry="4" stroke="#61DAFB" strokeWidth="1.2" transform="rotate(120 12 12)" />
       </svg>
     ),
   },
@@ -24,12 +23,12 @@ const badges = [
     color: "#A259FF",
     border: "rgba(162,89,255,0.35)",
     icon: (
-      <svg width="16" height="16" viewBox="0 0 38 57" fill="none">
-        <path d="M19 28.5A9.5 9.5 0 0 1 28.5 19H19V9.5A9.5 9.5 0 0 0 9.5 19v.5a9 9 0 0 0 9.5 9z" fill="#0ACF83" />
-        <path d="M19 9.5h9.5a9.5 9.5 0 1 1-9.5 9.5V9.5z" fill="#A259FF" />
-        <path d="M9.5 19H19v9.5a9.5 9.5 0 0 1-9.5-9.5z" fill="#F24E1E" />
-        <path d="M19 28.5v9.5a9.5 9.5 0 0 1 0-19v9.5z" fill="#FF7262" />
-        <circle cx="28.5" cy="28.5" r="9.5" fill="#1ABCFE" />
+      <svg width="16" height="16" viewBox="0 0 38 57">
+        <path fill="#F24E1E" d="M19 28.5a9.5 9.5 0 1 1 0-19h-9.5a9.5 9.5 0 1 0 0 19z"/>
+        <path fill="#FF7262" d="M38 9.5A9.5 9.5 0 0 1 28.5 19H19V0h9.5A9.5 9.5 0 0 1 38 9.5z"/>
+        <path fill="#A259FF" d="M19 47.5a9.5 9.5 0 1 1 0-19h-9.5a9.5 9.5 0 1 0 0 19z"/>
+        <circle cx="28.5" cy="28.5" r="9.5" fill="#1ABCFE"/>
+        <path fill="#0ACF83" d="M19 57A9.5 9.5 0 0 1 9.5 47.5v-9.5H19a9.5 9.5 0 0 1 0 19z"/>
       </svg>
     ),
   },
