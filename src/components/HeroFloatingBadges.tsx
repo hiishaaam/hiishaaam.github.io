@@ -23,12 +23,12 @@ const badges = [
     color: "#A259FF",
     border: "rgba(162,89,255,0.35)",
     icon: (
-      <svg width="16" height="16" viewBox="0 0 38 57">
-        <path fill="#F24E1E" d="M19 28.5a9.5 9.5 0 1 1 0-19h-9.5a9.5 9.5 0 1 0 0 19z"/>
-        <path fill="#FF7262" d="M38 9.5A9.5 9.5 0 0 1 28.5 19H19V0h9.5A9.5 9.5 0 0 1 38 9.5z"/>
-        <path fill="#A259FF" d="M19 47.5a9.5 9.5 0 1 1 0-19h-9.5a9.5 9.5 0 1 0 0 19z"/>
-        <circle cx="28.5" cy="28.5" r="9.5" fill="#1ABCFE"/>
-        <path fill="#0ACF83" d="M19 57A9.5 9.5 0 0 1 9.5 47.5v-9.5H19a9.5 9.5 0 0 1 0 19z"/>
+      <svg width="16" height="16" viewBox="0 0 32 48" fill="none">
+        <path d="M16 16H8a8 8 0 1 1 0-16h8v16z" fill="#F24E1E"/>
+        <path d="M16 32H8a8 8 0 1 1 0-16h8v16z" fill="#A259FF"/>
+        <path d="M16 32H8a8 8 0 1 0 8 8v-8z" fill="#0ACF83"/>
+        <path d="M16 16h8a8 8 0 1 0 0-16h-8v16z" fill="#FF7262"/>
+        <circle cx="24" cy="24" r="8" fill="#1ABCFE"/>
       </svg>
     ),
   },
