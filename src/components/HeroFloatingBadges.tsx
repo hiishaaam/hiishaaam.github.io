@@ -466,6 +466,7 @@ export default function HeroFloatingBadges() {
             <img 
               src="https://i.postimg.cc/pRpxd1dH/portfolio-herosection.jpg" 
               alt="Muhammed Hisham A" 
+              fetchPriority="high"
               style={{ 
                 position: "relative", zIndex: 1, 
                 width: "100%", height: "100%", 

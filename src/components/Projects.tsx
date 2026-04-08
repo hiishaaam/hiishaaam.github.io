@@ -123,6 +123,8 @@ function ProjectCard({ project, index }: { key?: React.Key, project: any, index:
           <img 
             src={project.image} 
             alt={project.title} 
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
             referrerPolicy="no-referrer"
           />

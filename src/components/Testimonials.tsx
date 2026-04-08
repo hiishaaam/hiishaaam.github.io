@@ -37,7 +37,7 @@ const TestimonialCard: React.FC<{ testimonial: typeof testimonials[0] }> = ({ te
         "{testimonial.quote}"
       </p>
       <div className="flex items-center gap-4 pt-4 border-t border-white/10">
-        <img src={testimonial.avatar} alt={testimonial.name} className="w-12 h-12 rounded-full bg-white/10" />
+        <img src={testimonial.avatar} alt={testimonial.name} loading="lazy" decoding="async" className="w-12 h-12 rounded-full bg-white/10" />
         <div>
           <h4 className="text-white font-heading font-bold">{testimonial.name}</h4>
           <p className="text-white/50 text-sm font-sans">{testimonial.role}</p>

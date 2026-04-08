@@ -77,6 +77,8 @@ export function About() {
               <img 
                 src="https://i.postimg.cc/RSSxxg8N/portfolio-aboutsection.jpg" 
                 alt="About Workspace" 
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover object-center"
               />
             </motion.div>

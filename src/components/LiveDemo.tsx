@@ -47,6 +47,8 @@ export function LiveDemo() {
                 <img 
                   src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&q=80&w=800" 
                   alt="EduFace Demo" 
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover opacity-60 mix-blend-luminosity"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -86,6 +88,8 @@ export function LiveDemo() {
                 <img 
                   src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800" 
                   alt="AchieveLog Demo" 
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover opacity-60 mix-blend-luminosity"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
