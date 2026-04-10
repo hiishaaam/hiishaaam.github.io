@@ -82,7 +82,8 @@ export function Experience() {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <span className="text-primary font-mono text-xs uppercase tracking-widest mb-4 block">/ experience</span>
+          <span className="text-primary font-mono text-xs uppercase tracking-widest mb-4 block" aria-hidden="true">/ experience</span>
+          <h2 className="text-4xl md:text-5xl font-heading font-bold text-white tracking-tight">Experience & Certifications</h2>
         </motion.div>
 
         <div ref={containerRef} className="relative ml-4 md:ml-0">

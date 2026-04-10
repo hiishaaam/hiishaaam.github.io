@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { motion } from 'motion/react';
 import { Quote } from 'lucide-react';
 
@@ -28,8 +28,12 @@ const testimonials = [
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Smitha&backgroundColor=00D4C8"
   }
 ];
+type TestimonialCardProps = {
+  key?: React.Key;
+  testimonial: typeof testimonials[0];
+};
 
-const TestimonialCard: React.FC<{ testimonial: typeof testimonials[0] }> = ({ testimonial }) => {
+const TestimonialCard = ({ testimonial }: TestimonialCardProps) => {
   return (
     <div className="w-[350px] md:w-[450px] p-8 rounded-2xl bg-white/5 border border-white/10 shrink-0 flex flex-col gap-6 hover:bg-white/10 transition-colors">
       <Quote className="text-primary/40" size={32} />

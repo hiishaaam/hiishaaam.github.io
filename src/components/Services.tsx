@@ -156,7 +156,8 @@ export function Services() {
           transition={{ duration: 0.6 }}
           className="mb-24"
         >
-          <span className="text-primary font-mono text-xs uppercase tracking-widest mb-4 block">/ services</span>
+          <span className="text-primary font-mono text-xs uppercase tracking-widest mb-4 block" aria-hidden="true">/ services</span>
+          <h2 className="text-4xl md:text-5xl font-heading font-bold text-white tracking-tight">What I Offer</h2>
         </motion.div>
 
         <div className="flex flex-col gap-y-32">

@@ -1,11 +1,11 @@
 import { motion } from 'motion/react';
 
 const photos = [
-  'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=600',
-  'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=600',
-  'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=600',
-  'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600',
-  'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=600',
+  { url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=600', alt: 'IEDC tech conference with students presenting innovations' },
+  { url: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=600', alt: 'IEDC team brainstorming session at the college campus' },
+  { url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=600', alt: 'Student developers collaborating on hackathon project' },
+  { url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600', alt: 'Workshop session mentoring the next generation of builders' },
+  { url: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=600', alt: 'IEDC innovation lab strategy meeting' },
 ];
 
 export function IEDC() {
@@ -45,10 +45,12 @@ export function IEDC() {
                 >
                   <div className="absolute inset-0 bg-primary/20 mix-blend-overlay group-hover:opacity-0 transition-opacity duration-500 z-10" />
                   <img 
-                    src={photo} 
-                    alt="IEDC Community Event" 
+                    src={photo.url} 
+                    alt={photo.alt} 
                     loading="lazy"
                     decoding="async"
+                    width={384}
+                    height={288}
                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
                   />
                 </div>

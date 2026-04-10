@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import type React from "react";
+import { useEffect, useRef } from "react";
 import { Github, Linkedin, Mail } from "lucide-react";
 import { motion } from "motion/react";
 
@@ -69,7 +70,23 @@ const badges = [
   },
 ];
 
-function OrbitBadge({ badge, index, total, mousePosRef }: { key?: React.Key, badge: any, index: number, total: number, mousePosRef: React.MutableRefObject<{ x: number, y: number }> }) {
+type Badge = {
+  id: string;
+  label: string;
+  color: string;
+  border: string;
+  icon: React.ReactNode;
+};
+
+type OrbitBadgeProps = {
+  key?: React.Key;
+  badge: Badge;
+  index: number;
+  total: number;
+  mousePosRef: React.MutableRefObject<{ x: number, y: number }>;
+};
+
+function OrbitBadge({ badge, index, total, mousePosRef }: OrbitBadgeProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const angleRef = useRef((index / total) * Math.PI * 2);
   const currentPos = useRef({ x: 0, y: 0 });

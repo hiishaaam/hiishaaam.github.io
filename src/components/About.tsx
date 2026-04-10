@@ -57,7 +57,8 @@ export function About() {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <span className="text-primary font-mono text-xs uppercase tracking-widest mb-4 block">/ about</span>
+          <span className="text-primary font-mono text-xs uppercase tracking-widest mb-4 block" aria-hidden="true">/ about</span>
+          <h2 className="text-4xl md:text-5xl font-heading font-bold text-white tracking-tight">About Me</h2>
         </motion.div>
 
         <div className="grid lg:grid-cols-12 gap-16 items-center">
@@ -76,9 +77,11 @@ export function About() {
             >
               <img 
                 src="https://i.postimg.cc/RSSxxg8N/portfolio-aboutsection.jpg" 
-                alt="About Workspace" 
+                alt="Muhammed Hisham A at his workspace" 
                 loading="lazy"
                 decoding="async"
+                width={600}
+                height={750}
                 className="w-full h-full object-cover object-center"
               />
             </motion.div>

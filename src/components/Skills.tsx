@@ -101,7 +101,8 @@ export function Skills() {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <span className="text-primary font-mono text-xs uppercase tracking-widest mb-4 block">/ skills</span>
+          <span className="text-primary font-mono text-xs uppercase tracking-widest mb-4 block" aria-hidden="true">/ skills</span>
+          <h2 className="text-4xl md:text-5xl font-heading font-bold text-white tracking-tight">What I Work With</h2>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">

@@ -15,6 +15,8 @@ import { Contact } from './components/Contact';
 import CustomCursor from './components/CustomCursor';
 import { Footer } from './components/Footer';
 import { NotFound } from './components/NotFound';
+import { CommandPalette } from './components/CommandPalette';
+import { SpotifyWidget } from './components/SpotifyWidget';
 
 export default function App() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -29,6 +31,8 @@ export default function App() {
   return (
     <div className="min-h-screen text-white selection:bg-primary/30 selection:text-white">
       <PageLoader />
+      <CommandPalette />
+      <SpotifyWidget />
       <div className="mesh-bg" />
       <div className="noise-overlay" />
       <CustomCursor />

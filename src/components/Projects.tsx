@@ -1,4 +1,5 @@
-import React, { useRef } from 'react';
+import type React from 'react';
+import { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { ExternalLink, Github } from 'lucide-react';
 
@@ -61,7 +62,23 @@ const getTechStyle = (tech: string) => {
   return styles[tech] || { bg: 'rgba(255, 255, 255, 0.05)', text: 'rgba(255, 255, 255, 0.7)', border: 'rgba(255, 255, 255, 0.1)', glow: 'rgba(255, 255, 255, 0.05)' };
 };
 
-function ProjectCard({ project, index }: { key?: React.Key, project: any, index: number }) {
+type Project = {
+  title: string;
+  badge: string;
+  image: string;
+  stack: string[];
+  description: string;
+  featured: boolean;
+  link?: string;
+};
+
+type ProjectCardProps = {
+  key?: React.Key;
+  project: Project;
+  index: number;
+};
+
+function ProjectCard({ project, index }: ProjectCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -122,9 +139,11 @@ function ProjectCard({ project, index }: { key?: React.Key, project: any, index:
           <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
           <img 
             src={project.image} 
-            alt={project.title} 
+            alt={`Screenshot of ${project.title}`} 
             loading="lazy"
             decoding="async"
+            width={800}
+            height={450}
             className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
             referrerPolicy="no-referrer"
           />
@@ -210,7 +229,8 @@ export function Projects() {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <span className="text-primary font-mono text-xs uppercase tracking-widest mb-4 block">/ projects</span>
+          <span className="text-primary font-mono text-xs uppercase tracking-widest mb-4 block" aria-hidden="true">/ projects</span>
+          <h2 className="text-4xl md:text-5xl font-heading font-bold text-white tracking-tight">Selected Work</h2>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-8 mb-16" style={{ perspective: "1000px" }}>

@@ -41,7 +41,7 @@ export function Navbar() {
         </a>
 
         {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-8" aria-label="Primary navigation">
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -63,6 +63,8 @@ export function Navbar() {
         <button
           className="lg:hidden text-white/80 hover:text-white relative z-50"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          aria-expanded={isMobileMenuOpen}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -77,7 +79,7 @@ export function Navbar() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-[#050810] z-40 flex flex-col items-center justify-center"
           >
-            <nav className="flex flex-col items-center gap-8">
+            <nav className="flex flex-col items-center gap-8" aria-label="Mobile navigation">
               {navLinks.map((link) => (
                 <a
                   key={link.name}

@@ -46,9 +46,11 @@ export function LiveDemo() {
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent" />
                 <img 
                   src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&q=80&w=800" 
-                  alt="EduFace Demo" 
+                  alt="EduFace attendance system demo showing facial recognition interface" 
                   loading="lazy"
                   decoding="async"
+                  width={800}
+                  height={450}
                   className="w-full h-full object-cover opacity-60 mix-blend-luminosity"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -87,9 +89,11 @@ export function LiveDemo() {
                 <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 to-transparent" />
                 <img 
                   src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800" 
-                  alt="AchieveLog Demo" 
+                  alt="AchieveLog study tracker app showing analytics dashboard" 
                   loading="lazy"
                   decoding="async"
+                  width={800}
+                  height={450}
                   className="w-full h-full object-cover opacity-60 mix-blend-luminosity"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
