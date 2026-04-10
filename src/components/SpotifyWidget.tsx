@@ -15,60 +15,34 @@ export function SpotifyWidget() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    let ws: WebSocket;
-    let heartbeatInterval: NodeJS.Timeout;
-
-    const connect = () => {
-      ws = new WebSocket('wss://api.lanyard.rest/socket');
-
-      ws.onopen = () => {
-        ws.send(JSON.stringify({
-          op: 2,
-          d: { subscribe_to_id: DISCORD_ID }
-        }));
-      };
-
-      ws.onmessage = (event) => {
-        const msg = JSON.parse(event.data);
-
-        // Map Lanyard heartbeat
-        if (msg.op === 1) {
-          heartbeatInterval = setInterval(() => {
-            if (ws.readyState === WebSocket.OPEN) {
-              ws.send(JSON.stringify({ op: 3 }));
-            }
-          }, msg.d.heartbeat_interval);
+    const fetchSpotify = async () => {
+      try {
+        const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
+        const json = await res.json();
+        
+        if (json.success && json.data.listening_to_spotify && json.data.spotify) {
+          const spotify = json.data.spotify;
+          setSpotifyData({
+            song: spotify.song,
+            artist: spotify.artist,
+            album_art_url: spotify.album_art_url,
+            track_id: spotify.track_id
+          });
+          setIsPlaying(true);
+        } else {
+          setIsPlaying(false);
         }
-
-        // Presence payload
-        if (msg.t === 'INIT_STATE' || msg.t === 'PRESENCE_UPDATE') {
-          const spotify = msg.d.spotify;
-          if (spotify) {
-            setSpotifyData({
-              song: spotify.song,
-              artist: spotify.artist,
-              album_art_url: spotify.album_art_url,
-              track_id: spotify.track_id
-            });
-            setIsPlaying(true);
-          } else {
-            setIsPlaying(false);
-          }
-        }
-      };
-
-      ws.onclose = () => {
-        clearInterval(heartbeatInterval);
-        setTimeout(connect, 5000); // Attempt to reconnect
-      };
+      } catch (error) {
+        console.error("Failed to fetch Spotify status", error);
+      }
     };
 
-    connect();
+    // Initial fetch
+    fetchSpotify();
 
-    return () => {
-      if (ws) ws.close();
-      if (heartbeatInterval) clearInterval(heartbeatInterval);
-    };
+    // Poll every 3 seconds (Supported officially by Lanyard)
+    const interval = setInterval(fetchSpotify, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
