@@ -150,7 +150,7 @@ export function SpotifyWidget() {
                 position: 'absolute',
                 inset: '-8px',
                 borderRadius: '20px',
-                background: `radial-gradient(ellipse at center, rgba(29, 185, 84, 0.15) 0%, transparent 70%)`,
+                background: `radial-gradient(ellipse at center, rgba(224, 122, 95, 0.15) 0%, transparent 70%)`,
                 filter: 'blur(20px)',
                 animation: 'spotify-glow-pulse 3s ease-in-out infinite',
                 pointerEvents: 'none',
@@ -181,7 +181,7 @@ export function SpotifyWidget() {
                   left: '12px',
                   right: '12px',
                   height: '1px',
-                  background: 'linear-gradient(90deg, transparent, rgba(29, 185, 84, 0.5), transparent)',
+                  background: 'linear-gradient(90deg, transparent, rgba(224, 122, 95, 0.5), transparent)',
                 }} />
 
                 {/* Content row */}
@@ -199,7 +199,7 @@ export function SpotifyWidget() {
                       position: 'absolute',
                       inset: '-2px',
                       borderRadius: '50%',
-                      background: 'conic-gradient(from 0deg, rgba(29, 185, 84, 0.3), transparent, rgba(29, 185, 84, 0.15), transparent, rgba(29, 185, 84, 0.3))',
+                      background: 'conic-gradient(from 0deg, rgba(224, 122, 95, 0.3), transparent, rgba(129, 178, 154, 0.15), transparent, rgba(224, 122, 95, 0.3))',
                       animation: 'vinyl-spin 3s linear infinite',
                     }} />
 
@@ -269,14 +269,14 @@ export function SpotifyWidget() {
                       marginBottom: '4px',
                     }}>
                       {/* Spotify icon */}
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="#1DB954" style={{ flexShrink: 0 }}>
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="#E07A5F" style={{ flexShrink: 0 }}>
                         <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.24 1.021zM19.32 14.1c-.301.42-.84.54-1.261.24-3.24-1.98-8.159-2.58-11.94-1.44-.48.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.9 9.9 15.36 10.56 19.08 12.84c.42.3.54.84.24 1.26zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.781-.18-.6.18-1.2.78-1.38 4.2-1.26 11.28-1.02 15.72 1.62.539.3.719 1.02.419 1.56-.239.54-.959.72-1.379.42z" />
                       </svg>
 
                       <span style={{
                         fontSize: '9px',
                         fontWeight: 700,
-                        color: '#1DB954',
+                        color: '#E07A5F',
                         textTransform: 'uppercase',
                         letterSpacing: '0.12em',
                         fontFamily: 'var(--font-mono)',
@@ -304,7 +304,7 @@ export function SpotifyWidget() {
                             style={{
                               width: '2px',
                               borderRadius: '1px',
-                              background: 'linear-gradient(to top, #1DB954, #1ed760)',
+                              background: 'linear-gradient(to top, #E07A5F, #81B29A)',
                               animation: `${bar.anim} ${bar.dur} ease-in-out infinite`,
                             }}
                           />
@@ -359,7 +359,7 @@ export function SpotifyWidget() {
                             style={{
                               height: '100%',
                               borderRadius: '2px',
-                              background: 'linear-gradient(90deg, #1DB954, #1ed760)',
+                              background: 'linear-gradient(90deg, #E07A5F, #81B29A)',
                               width: `${progress * 100}%`,
                               position: 'relative',
                             }}
@@ -372,8 +372,8 @@ export function SpotifyWidget() {
                               width: '5px',
                               height: '5px',
                               borderRadius: '50%',
-                              background: '#1ed760',
-                              boxShadow: '0 0 6px rgba(30, 215, 96, 0.8)',
+                              background: '#E07A5F',
+                              boxShadow: '0 0 6px rgba(224, 122, 95, 0.8)',
                             }} />
                           </motion.div>
                         </div>
