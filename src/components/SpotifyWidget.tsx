@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
 const DISCORD_ID = "1162579462056058880";
+const LANYARD_WS_URL = "wss://api.lanyard.rest/socket";
 
 // Curated playlist — rotates every hour (24 songs = full day cycle)
 // Album art from Apple Music CDN (300x300), Spotify track IDs for linking
@@ -69,57 +70,110 @@ function getCurrentFallbackIndex(): number {
   return new Date().getHours() % FALLBACK_PLAYLIST.length;
 }
 
-export function SpotifyWidget() {
+function getFallbackTrack(): TrackData {
+  const idx = getCurrentFallbackIndex();
+  const f = FALLBACK_PLAYLIST[idx];
+  return { song: f.song, artist: f.artist, album_art_url: f.art, track_id: f.track_id, isLive: false, timestamps: null };
+}
+
+// ─── Lanyard WebSocket Hook ──────────────────────────────────────────────────
+function useLanyardWebSocket(discordId: string) {
   const [track, setTrack] = useState<TrackData | null>(null);
-  const [progress, setProgress] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const animFrameRef = useRef<number>(0);
+  const wsRef = useRef<WebSocket | null>(null);
+  const heartbeatRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const fallbackIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Primary: Lanyard live data; Fallback: curated playlist with pre-baked art
-  useEffect(() => {
-    let cancelled = false;
+  const processPresence = useCallback((data: Record<string, unknown>) => {
+    const spotify = data.spotify as Record<string, unknown> | null;
+    const listening = data.listening_to_spotify as boolean;
 
-    const fetchData = async () => {
-      try {
-        const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
-        const json = await res.json();
-
-        if (!cancelled && json.success && json.data.listening_to_spotify && json.data.spotify) {
-          const s = json.data.spotify;
-          setTrack({
-            song: s.song,
-            artist: s.artist,
-            album_art_url: s.album_art_url,
-            track_id: s.track_id,
-            isLive: true,
-            timestamps: s.timestamps
-              ? { start: s.timestamps.start, end: s.timestamps.end }
-              : null,
-          });
-          return;
-        }
-      } catch {
-        // Lanyard failed, fall through to fallback
-      }
-
-      // Fallback — curated playlist (no API calls needed, art is pre-baked)
-      if (cancelled) return;
-      const idx = getCurrentFallbackIndex();
-      const fallback = FALLBACK_PLAYLIST[idx];
+    if (listening && spotify) {
+      const ts = spotify.timestamps as { start: number; end: number } | undefined;
       setTrack({
-        song: fallback.song,
-        artist: fallback.artist,
-        album_art_url: fallback.art,
-        track_id: fallback.track_id,
-        isLive: false,
-        timestamps: null,
+        song: spotify.song as string,
+        artist: spotify.artist as string,
+        album_art_url: spotify.album_art_url as string,
+        track_id: spotify.track_id as string,
+        isLive: true,
+        timestamps: ts ? { start: ts.start, end: ts.end } : null,
       });
+      // Clear fallback interval while live
+      if (fallbackIntervalRef.current) { clearInterval(fallbackIntervalRef.current); fallbackIntervalRef.current = null; }
+    } else {
+      setTrack(getFallbackTrack());
+      // Re-check fallback hourly
+      if (!fallbackIntervalRef.current) {
+        fallbackIntervalRef.current = setInterval(() => setTrack(getFallbackTrack()), 60_000);
+      }
+    }
+  }, []);
+
+  const connect = useCallback(() => {
+    if (wsRef.current?.readyState === WebSocket.OPEN) return;
+
+    const ws = new WebSocket(LANYARD_WS_URL);
+    wsRef.current = ws;
+
+    ws.onmessage = (event) => {
+      const msg = JSON.parse(event.data);
+
+      switch (msg.op) {
+        case 1: {
+          // Hello — start heartbeat and subscribe
+          const interval = msg.d.heartbeat_interval;
+          if (heartbeatRef.current) clearInterval(heartbeatRef.current);
+          heartbeatRef.current = setInterval(() => {
+            if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ op: 3 }));
+          }, interval);
+          ws.send(JSON.stringify({ op: 2, d: { subscribe_to_id: discordId } }));
+          break;
+        }
+        case 0: {
+          // Event — INIT_STATE or PRESENCE_UPDATE
+          if (msg.t === "INIT_STATE" || msg.t === "PRESENCE_UPDATE") {
+            processPresence(msg.d);
+          }
+          break;
+        }
+      }
     };
 
-    fetchData();
-    const interval = setInterval(fetchData, 5000);
-    return () => { cancelled = true; clearInterval(interval); };
-  }, []);
+    ws.onclose = () => {
+      if (heartbeatRef.current) { clearInterval(heartbeatRef.current); heartbeatRef.current = null; }
+      // Auto-reconnect after 3s
+      reconnectTimeoutRef.current = setTimeout(connect, 3000);
+    };
+
+    ws.onerror = () => ws.close();
+  }, [discordId, processPresence]);
+
+  useEffect(() => {
+    // Set fallback immediately, then connect WS
+    setTrack(getFallbackTrack());
+    connect();
+
+    return () => {
+      if (wsRef.current) { wsRef.current.close(); wsRef.current = null; }
+      if (heartbeatRef.current) { clearInterval(heartbeatRef.current); heartbeatRef.current = null; }
+      if (reconnectTimeoutRef.current) { clearTimeout(reconnectTimeoutRef.current); reconnectTimeoutRef.current = null; }
+      if (fallbackIntervalRef.current) { clearInterval(fallbackIntervalRef.current); fallbackIntervalRef.current = null; }
+    };
+  }, [connect]);
+
+  return track;
+}
+
+// ─── Widget Component ────────────────────────────────────────────────────────
+export function SpotifyWidget() {
+  const track = useLanyardWebSocket(DISCORD_ID);
+  const [progress, setProgress] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
+  const animFrameRef = useRef<number>(0);
+
+  // Unique key for AnimatePresence song transitions
+  const trackKey = track ? `${track.song}-${track.artist}` : 'none';
 
   // Progress bar animation
   useEffect(() => {
@@ -129,7 +183,6 @@ export function SpotifyWidget() {
         const { start, end } = track.timestamps;
         setProgress(Math.min(Math.max((now - start) / (end - start), 0), 1));
       } else {
-        // Fake 4-min looping cycle for fallback
         const cycleMs = 4 * 60 * 1000;
         setProgress((Date.now() % cycleMs) / cycleMs);
       }
@@ -155,173 +208,283 @@ export function SpotifyWidget() {
         @keyframes spotify-eq-4 { 0%, 100% { height: 10px; } 50% { height: 3px; } }
         @keyframes spotify-glow-pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }
         @keyframes vinyl-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes mini-pulse { 0%, 100% { box-shadow: 0 0 8px rgba(224,122,95,0.3); } 50% { box-shadow: 0 0 16px rgba(224,122,95,0.6); } }
       `}</style>
 
-      <AnimatePresence>
-        {track && (
+      <AnimatePresence mode="wait">
+        {/* ── Minimized: tiny floating music pill ── */}
+        {isMinimized && track && (
+          <motion.button
+            key="minimized"
+            initial={{ opacity: 0, scale: 0.3, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.3, y: 20 }}
+            transition={{ duration: 0.35, type: "spring", damping: 20 }}
+            onClick={() => setIsMinimized(false)}
+            className="fixed bottom-5 right-5 z-[100]"
+            style={{
+              width: '44px', height: '44px', borderRadius: '50%', border: 'none', cursor: 'pointer',
+              background: 'linear-gradient(135deg, rgba(10,15,26,0.95), rgba(15,20,30,0.9))',
+              backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              borderWidth: '1px', borderStyle: 'solid', borderColor: 'rgba(224,122,95,0.25)',
+              animation: 'mini-pulse 2s ease-in-out infinite',
+              position: 'relative', overflow: 'hidden',
+            }}
+            aria-label="Expand Spotify widget"
+          >
+            {/* Mini album art background */}
+            {track.album_art_url && (
+              <div style={{
+                position: 'absolute', inset: 0, borderRadius: '50%', overflow: 'hidden',
+                animation: 'vinyl-spin 8s linear infinite',
+              }}>
+                <img src={track.album_art_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.35, filter: 'blur(1px)' }} />
+              </div>
+            )}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#E07A5F" style={{ position: 'relative', zIndex: 2 }}>
+              <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.24 1.021zM19.32 14.1c-.301.42-.84.54-1.261.24-3.24-1.98-8.159-2.58-11.94-1.44-.48.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.9 9.9 15.36 10.56 19.08 12.84c.42.3.54.84.24 1.26zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.781-.18-.6.18-1.2.78-1.38 4.2-1.26 11.28-1.02 15.72 1.62.539.3.719 1.02.419 1.56-.239.54-.959.72-1.379.42z" />
+            </svg>
+          </motion.button>
+        )}
+
+        {/* ── Expanded: full widget ── */}
+        {!isMinimized && track && (
           <motion.div
+            key="expanded"
             initial={{ opacity: 0, y: 60, scale: 0.8 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 60, scale: 0.8 }}
-            transition={{ duration: 0.6, type: "spring", damping: 20, stiffness: 200 }}
+            transition={{ duration: 0.5, type: "spring", damping: 20, stiffness: 200 }}
             className="fixed bottom-5 right-5 z-[100]"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
-            <a
-              href={track.track_id ? `https://open.spotify.com/track/${track.track_id}` : '#'}
-              target="_blank" rel="noopener noreferrer"
-              style={{ textDecoration: 'none', display: 'block', position: 'relative' }}
-            >
-              {/* Ambient glow */}
-              <div style={{
-                position: 'absolute', inset: '-8px', borderRadius: '20px',
-                background: 'radial-gradient(ellipse at center, rgba(224, 122, 95, 0.15) 0%, transparent 70%)',
-                filter: 'blur(20px)', animation: 'spotify-glow-pulse 3s ease-in-out infinite',
-                pointerEvents: 'none', zIndex: -1,
-              }} />
+            <div style={{ position: 'relative' }}>
+              {/* Minimize button */}
+              <AnimatePresence>
+                {isHovered && (
+                  <motion.button
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.15 }}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsMinimized(true); }}
+                    style={{
+                      position: 'absolute', top: '-6px', right: '-6px', zIndex: 20,
+                      width: '20px', height: '20px', borderRadius: '50%',
+                      background: 'rgba(10, 15, 26, 0.9)', border: '1px solid rgba(255,255,255,0.1)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      cursor: 'pointer', padding: 0,
+                    }}
+                    aria-label="Minimize widget"
+                  >
+                    <svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round">
+                      <line x1="2" y1="5" x2="8" y2="5" />
+                    </svg>
+                  </motion.button>
+                )}
+              </AnimatePresence>
 
-              {/* Main card */}
-              <motion.div
-                animate={{ width: isHovered ? 280 : 240 }}
-                transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-                style={{
-                  background: 'linear-gradient(135deg, rgba(10, 15, 26, 0.92) 0%, rgba(15, 20, 30, 0.88) 100%)',
-                  backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
-                  border: '1px solid rgba(255, 255, 255, 0.06)',
-                  borderRadius: '16px', padding: '12px',
-                  overflow: 'hidden', position: 'relative',
-                }}
+              <a
+                href={track.track_id ? `https://open.spotify.com/track/${track.track_id}` : '#'}
+                target="_blank" rel="noopener noreferrer"
+                style={{ textDecoration: 'none', display: 'block', position: 'relative' }}
               >
-                {/* Top accent line */}
+                {/* Ambient glow */}
                 <div style={{
-                  position: 'absolute', top: 0, left: '12px', right: '12px', height: '1px',
-                  background: 'linear-gradient(90deg, transparent, rgba(224, 122, 95, 0.5), transparent)',
+                  position: 'absolute', inset: '-8px', borderRadius: '20px',
+                  background: 'radial-gradient(ellipse at center, rgba(224, 122, 95, 0.15) 0%, transparent 70%)',
+                  filter: 'blur(20px)', animation: 'spotify-glow-pulse 3s ease-in-out infinite',
+                  pointerEvents: 'none', zIndex: -1,
                 }} />
 
-                {/* Content row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                {/* Main card */}
+                <motion.div
+                  animate={{ width: isHovered ? 280 : 240 }}
+                  transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(10, 15, 26, 0.92) 0%, rgba(15, 20, 30, 0.88) 100%)',
+                    backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
+                    border: '1px solid rgba(255, 255, 255, 0.06)',
+                    borderRadius: '16px', padding: '12px',
+                    overflow: 'hidden', position: 'relative',
+                  }}
+                >
+                  {/* Top accent line */}
+                  <div style={{
+                    position: 'absolute', top: 0, left: '12px', right: '12px', height: '1px',
+                    background: 'linear-gradient(90deg, transparent, rgba(224, 122, 95, 0.5), transparent)',
+                  }} />
 
-                  {/* Vinyl disc */}
-                  <div style={{ position: 'relative', width: '48px', height: '48px', flexShrink: 0 }}>
-                    <div style={{
-                      position: 'absolute', inset: '-2px', borderRadius: '50%',
-                      background: 'conic-gradient(from 0deg, rgba(224,122,95,0.3), transparent, rgba(129,178,154,0.15), transparent, rgba(224,122,95,0.3))',
-                      animation: 'vinyl-spin 3s linear infinite',
-                    }} />
-                    <div style={{
-                      width: '48px', height: '48px', borderRadius: '50%',
-                      overflow: 'hidden', position: 'relative', background: '#0a0a0a',
-                    }}>
-                      <div style={{ position: 'absolute', inset: '0', animation: 'vinyl-spin 4s linear infinite' }}>
-                        {track.album_art_url ? (
-                          <img src={track.album_art_url} alt="Album Art"
-                            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                        ) : (
-                          <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, #E07A5F, #81B29A)' }} />
-                        )}
-                      </div>
+                  {/* Content row */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+
+                    {/* Vinyl disc with crossfade art */}
+                    <div style={{ position: 'relative', width: '48px', height: '48px', flexShrink: 0 }}>
                       <div style={{
-                        position: 'absolute', inset: 0, borderRadius: '50%', pointerEvents: 'none',
-                        background: 'radial-gradient(circle, transparent 30%, rgba(0,0,0,0.15) 31%, transparent 32%), radial-gradient(circle, transparent 45%, rgba(0,0,0,0.1) 46%, transparent 47%), radial-gradient(circle, transparent 60%, rgba(0,0,0,0.08) 61%, transparent 62%)',
+                        position: 'absolute', inset: '-2px', borderRadius: '50%',
+                        background: 'conic-gradient(from 0deg, rgba(224,122,95,0.3), transparent, rgba(129,178,154,0.15), transparent, rgba(224,122,95,0.3))',
+                        animation: 'vinyl-spin 3s linear infinite',
                       }} />
                       <div style={{
-                        position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-                        width: '10px', height: '10px', borderRadius: '50%',
-                        background: 'radial-gradient(circle, #0a0f1a 40%, #1a1f2e 100%)',
-                        border: '1.5px solid rgba(255, 255, 255, 0.1)', zIndex: 10,
-                      }} />
-                    </div>
-                  </div>
-
-                  {/* Track info */}
-                  <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="#E07A5F" style={{ flexShrink: 0 }}>
-                        <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.24 1.021zM19.32 14.1c-.301.42-.84.54-1.261.24-3.24-1.98-8.159-2.58-11.94-1.44-.48.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.9 9.9 15.36 10.56 19.08 12.84c.42.3.54.84.24 1.26zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.781-.18-.6.18-1.2.78-1.38 4.2-1.26 11.28-1.02 15.72 1.62.539.3.719 1.02.419 1.56-.239.54-.959.72-1.379.42z" />
-                      </svg>
-                      <span style={{
-                        fontSize: '9px', fontWeight: 700, color: '#E07A5F',
-                        textTransform: 'uppercase', letterSpacing: '0.12em',
-                        fontFamily: 'var(--font-mono)', lineHeight: 1,
+                        width: '48px', height: '48px', borderRadius: '50%',
+                        overflow: 'hidden', position: 'relative', background: '#0a0a0a',
                       }}>
-                        {track.isLive ? 'Now Playing' : 'On Repeat'}
-                      </span>
-                      <div style={{ display: 'flex', gap: '1.5px', alignItems: 'flex-end', height: '14px', marginLeft: 'auto' }}>
-                        {[
-                          { anim: 'spotify-eq-1', dur: '0.8s' },
-                          { anim: 'spotify-eq-2', dur: '0.6s' },
-                          { anim: 'spotify-eq-3', dur: '0.9s' },
-                          { anim: 'spotify-eq-4', dur: '0.7s' },
-                        ].map((bar, i) => (
-                          <div key={i} style={{
-                            width: '2px', borderRadius: '1px',
-                            background: 'linear-gradient(to top, #E07A5F, #81B29A)',
-                            animation: `${bar.anim} ${bar.dur} ease-in-out infinite`,
-                          }} />
-                        ))}
+                        <div style={{ position: 'absolute', inset: '0', animation: 'vinyl-spin 4s linear infinite' }}>
+                          <AnimatePresence mode="wait">
+                            <motion.div
+                              key={trackKey + '-art'}
+                              initial={{ opacity: 0, scale: 1.15 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.9 }}
+                              transition={{ duration: 0.5 }}
+                              style={{ width: '100%', height: '100%' }}
+                            >
+                              {track.album_art_url ? (
+                                <img src={track.album_art_url} alt="Album Art"
+                                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                              ) : (
+                                <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, #E07A5F, #81B29A)' }} />
+                              )}
+                            </motion.div>
+                          </AnimatePresence>
+                        </div>
+                        {/* Vinyl grooves */}
+                        <div style={{
+                          position: 'absolute', inset: 0, borderRadius: '50%', pointerEvents: 'none',
+                          background: 'radial-gradient(circle, transparent 30%, rgba(0,0,0,0.15) 31%, transparent 32%), radial-gradient(circle, transparent 45%, rgba(0,0,0,0.1) 46%, transparent 47%), radial-gradient(circle, transparent 60%, rgba(0,0,0,0.08) 61%, transparent 62%)',
+                        }} />
+                        {/* Center hole */}
+                        <div style={{
+                          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                          width: '10px', height: '10px', borderRadius: '50%',
+                          background: 'radial-gradient(circle, #0a0f1a 40%, #1a1f2e 100%)',
+                          border: '1.5px solid rgba(255, 255, 255, 0.1)', zIndex: 10,
+                        }} />
                       </div>
                     </div>
 
-                    <div style={{ overflow: 'hidden', whiteSpace: 'nowrap', marginBottom: '2px' }}>
-                      <div style={{
-                        fontSize: '13px', fontWeight: 600, color: 'rgba(255,255,255,0.95)',
-                        fontFamily: 'var(--font-sans)', overflow: 'hidden', textOverflow: 'ellipsis',
-                      }}>
-                        {track.song}
-                      </div>
-                    </div>
-
-                    <div style={{
-                      fontSize: '11px', color: 'rgba(255,255,255,0.4)',
-                      fontFamily: 'var(--font-sans)', fontWeight: 400,
-                      overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: '8px',
-                    }}>
-                      {track.artist}
-                    </div>
-
-                    {/* Progress bar */}
-                    <div>
-                      <div style={{
-                        width: '100%', height: '3px', borderRadius: '2px',
-                        background: 'rgba(255,255,255,0.06)', overflow: 'hidden', position: 'relative',
-                      }}>
-                        <motion.div style={{
-                          height: '100%', borderRadius: '2px',
-                          background: 'linear-gradient(90deg, #E07A5F, #81B29A)',
-                          width: `${progress * 100}%`, position: 'relative',
-                        }}>
-                          <div style={{
-                            position: 'absolute', right: 0, top: '-1px',
-                            width: '5px', height: '5px', borderRadius: '50%',
-                            background: '#E07A5F', boxShadow: '0 0 6px rgba(224,122,95,0.8)',
-                          }} />
-                        </motion.div>
-                      </div>
-
-                      <AnimatePresence>
-                        {isHovered && track.isLive && track.timestamps && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.2 }}
-                            style={{ display: 'flex', justifyContent: 'space-between', marginTop: '4px' }}
+                    {/* Track info with slide transitions */}
+                    <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="#E07A5F" style={{ flexShrink: 0 }}>
+                          <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.24 1.021zM19.32 14.1c-.301.42-.84.54-1.261.24-3.24-1.98-8.159-2.58-11.94-1.44-.48.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.9 9.9 15.36 10.56 19.08 12.84c.42.3.54.84.24 1.26zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.781-.18-.6.18-1.2.78-1.38 4.2-1.26 11.28-1.02 15.72 1.62.539.3.719 1.02.419 1.56-.239.54-.959.72-1.379.42z" />
+                        </svg>
+                        <AnimatePresence mode="wait">
+                          <motion.span
+                            key={track.isLive ? 'live' : 'repeat'}
+                            initial={{ opacity: 0, y: -6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 6 }}
+                            transition={{ duration: 0.25 }}
+                            style={{
+                              fontSize: '9px', fontWeight: 700, color: '#E07A5F',
+                              textTransform: 'uppercase', letterSpacing: '0.12em',
+                              fontFamily: 'var(--font-mono)', lineHeight: 1,
+                            }}
                           >
-                            <span style={{ fontSize: '9px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-mono)', fontVariantNumeric: 'tabular-nums' }}>
-                              {formatTime(Math.min(elapsed, duration))}
-                            </span>
-                            <span style={{ fontSize: '9px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-mono)', fontVariantNumeric: 'tabular-nums' }}>
-                              {formatTime(duration)}
-                            </span>
+                            {track.isLive ? 'Now Playing' : 'On Repeat'}
+                          </motion.span>
+                        </AnimatePresence>
+                        <div style={{ display: 'flex', gap: '1.5px', alignItems: 'flex-end', height: '14px', marginLeft: 'auto' }}>
+                          {[
+                            { anim: 'spotify-eq-1', dur: '0.8s' },
+                            { anim: 'spotify-eq-2', dur: '0.6s' },
+                            { anim: 'spotify-eq-3', dur: '0.9s' },
+                            { anim: 'spotify-eq-4', dur: '0.7s' },
+                          ].map((bar, i) => (
+                            <div key={i} style={{
+                              width: '2px', borderRadius: '1px',
+                              background: 'linear-gradient(to top, #E07A5F, #81B29A)',
+                              animation: `${bar.anim} ${bar.dur} ease-in-out infinite`,
+                            }} />
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Song name — slide transition */}
+                      <div style={{ overflow: 'hidden', whiteSpace: 'nowrap', marginBottom: '2px', height: '18px' }}>
+                        <AnimatePresence mode="wait">
+                          <motion.div
+                            key={trackKey + '-song'}
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                            style={{
+                              fontSize: '13px', fontWeight: 600, color: 'rgba(255,255,255,0.95)',
+                              fontFamily: 'var(--font-sans)', overflow: 'hidden', textOverflow: 'ellipsis',
+                            }}
+                          >
+                            {track.song}
                           </motion.div>
-                        )}
-                      </AnimatePresence>
+                        </AnimatePresence>
+                      </div>
+
+                      {/* Artist — slide transition */}
+                      <div style={{ overflow: 'hidden', whiteSpace: 'nowrap', marginBottom: '8px', height: '15px' }}>
+                        <AnimatePresence mode="wait">
+                          <motion.div
+                            key={trackKey + '-artist'}
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.35, delay: 0.05, ease: [0.4, 0, 0.2, 1] }}
+                            style={{
+                              fontSize: '11px', color: 'rgba(255,255,255,0.4)',
+                              fontFamily: 'var(--font-sans)', fontWeight: 400,
+                              overflow: 'hidden', textOverflow: 'ellipsis',
+                            }}
+                          >
+                            {track.artist}
+                          </motion.div>
+                        </AnimatePresence>
+                      </div>
+
+                      {/* Progress bar */}
+                      <div>
+                        <div style={{
+                          width: '100%', height: '3px', borderRadius: '2px',
+                          background: 'rgba(255,255,255,0.06)', overflow: 'hidden', position: 'relative',
+                        }}>
+                          <motion.div style={{
+                            height: '100%', borderRadius: '2px',
+                            background: 'linear-gradient(90deg, #E07A5F, #81B29A)',
+                            width: `${progress * 100}%`, position: 'relative',
+                          }}>
+                            <div style={{
+                              position: 'absolute', right: 0, top: '-1px',
+                              width: '5px', height: '5px', borderRadius: '50%',
+                              background: '#E07A5F', boxShadow: '0 0 6px rgba(224,122,95,0.8)',
+                            }} />
+                          </motion.div>
+                        </div>
+
+                        <AnimatePresence>
+                          {isHovered && track.isLive && track.timestamps && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.2 }}
+                              style={{ display: 'flex', justifyContent: 'space-between', marginTop: '4px' }}
+                            >
+                              <span style={{ fontSize: '9px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-mono)', fontVariantNumeric: 'tabular-nums' }}>
+                                {formatTime(Math.min(elapsed, duration))}
+                              </span>
+                              <span style={{ fontSize: '9px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-mono)', fontVariantNumeric: 'tabular-nums' }}>
+                                {formatTime(duration)}
+                              </span>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            </a>
+                </motion.div>
+              </a>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
