@@ -7,7 +7,7 @@ const projects = [
   {
     title: 'EduFace: Face Recognition Attendance System',
     badge: '2025',
-    image: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&q=80&w=800',
+    image: '/projects/eduface.png',
     stack: ['React 19', 'TypeScript', 'Node.js', 'Express.js', 'Supabase', 'Google Gemini AI', 'Vercel'],
     description: 'AI-powered web app enabling 1,000+ students to mark attendance simultaneously using real-time facial recognition and GPS-based geo-fencing.',
     featured: true,
@@ -15,7 +15,7 @@ const projects = [
   {
     title: 'AchieveLog: Study Tracker App',
     badge: '2024',
-    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800',
+    image: '/projects/achievelog.png',
     stack: ['React 18', 'TypeScript', 'Supabase', 'Zustand', 'Recharts', 'Framer Motion'],
     description: 'Personal productivity app with session logging, analytics dashboards, exam countdown timers, streak tracking, and a real-time two-user companion mode.',
     featured: false,
@@ -23,7 +23,7 @@ const projects = [
   {
     title: 'finder-sports.com',
     badge: '2024',
-    image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&q=80&w=800',
+    image: '/projects/finder_sports.png',
     stack: ['React.js', 'Node.js', 'REST API', 'MongoDB'],
     description: 'Full-stack e-commerce website for a wellness product brand. Includes product listing, cart, checkout workflows, and frontend performance optimization.',
     link: 'https://finder-sports.com',
@@ -32,7 +32,7 @@ const projects = [
   {
     title: 'REST API Auth System',
     badge: '2023',
-    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800',
+    image: '/projects/auth.png',
     stack: ['Node.js', 'Express.js', 'JWT', 'MongoDB'],
     description: 'Secure authentication system with JWT-based login, signup, and protected route middleware with proper error handling and token expiry.',
     featured: false,
@@ -40,7 +40,7 @@ const projects = [
   {
     title: 'DSA Practice',
     badge: '2023',
-    image: 'https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&q=80&w=800',
+    image: '/projects/dsa.png',
     stack: ['JavaScript', 'Python'],
     description: '50+ coding problems solved covering arrays, strings, recursion, trees, and dynamic programming — focused on time/space complexity optimization.',
     featured: false,
